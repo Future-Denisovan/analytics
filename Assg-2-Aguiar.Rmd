@@ -140,26 +140,22 @@ retail_margin3<-.1
 ratiocounter3<-3
 
 marginal_costs3<-.9
-
-
-# Create an empty list
-elist1 <- c()
-
-print(whats_my_profit(baseprices3,pricechanges3,marginal_costs3, retail_margin3,quantitychange,ratiocounter3))
-
-
+df<-data.frame()
 
 # Create a for statement to populate the list
-for (i in seq(0, 0.9, by=0.01)) {
-  whats_my_profit(baseprices3,pricechanges3,i, retail_margin3,quantitychange,ratiocounter3)
+for (a in seq(0.01, 0.9, by=0.01)) {
+
+  myprofit<-whats_my_profit(baseprices3,pricechanges3,a, retail_margin3,quantitychange,ratiocounter3)
+
+  if (myprofit[2,1]>1){
+    df<-c(df,a,)
+    
+  }
+  
    
-   if (whats_my_profit(baseprices3,pricechanges3,i, retail_margin3,quantitychange,ratiocounter3) > 1) {
-      print(i)
-     elist1 <- c(elist1, i)
-   }
+
 }
 
-print((elist1))
 
 
 ```
