@@ -141,21 +141,29 @@ ratiocounter3<-3
 
 marginal_costs3<-.9
 df<-data.frame()
-
+df2<-data.frame()
 # Create a for statement to populate the list
 for (a in seq(0.01, 0.9, by=0.01)) {
 
   myprofit<-whats_my_profit(baseprices3,pricechanges3,a, retail_margin3,quantitychange,ratiocounter3)
+  
+  newrow2<-c(a,myprofit[2,1])
+  df2<-rbind(df2,newrow2)
 
   if (myprofit[2,1]>1){
-    df<-c(df,a,)
-    
+    newrow<-c(a,myprofit[2,1])
+    df<-rbind(df,newrow)
   }
   
    
 
 }
+colnames(df)<-c("Cost","Profit_Change")
+df
 
+
+colnames(df2)<-c("Cost","Profit_Change")
+df2
 
 
 ```
@@ -163,6 +171,14 @@ for (a in seq(0.01, 0.9, by=0.01)) {
 
 
 
+```{r}
+
+library(ggplot2)
+
+ggplot(data=df)+geom_point(mapping = aes(x = Cost, y = Profit_Change))
+ggplot(data=df2)+geom_point(mapping = aes(x = Cost, y = Profit_Change))
+
+```
 
 
 Product 1 Base Quantity  $= -2.5log(2)-1.5(log(1.75))+1.2(log(1.5))$ 
