@@ -1,6 +1,6 @@
 ---
 title: 'Assignment 2: Demand and Profitability Analysis'
-author: "Caleb Aguiar"
+author: "Caleb Aguiar & Annie Beyer"
 date: "January 2021"
 output: word_document
 urlcolor: blue
