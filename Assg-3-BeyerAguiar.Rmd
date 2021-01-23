@@ -23,6 +23,9 @@ wisk64_per<-wisk64_rev/(tide64_rev+tide128_rev+wisk64_rev)
 
 total<-tide128_per+tide64_per+wisk64_per
 
+library(psych)
+
+describe(detergent_DF)
 
 ```
 
