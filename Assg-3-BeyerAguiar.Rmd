@@ -14,6 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 tide128_rev<-sum(detergent_DF$q_tide128*detergent_DF$p_tide128)
+tide64_rev<-sum(detergent_DF$q_tide64*detergent_DF$p_tide64)
+wisk64_rev<-sum(detergent_DF$q_wisk64*detergent_DF$p_wisk64)
+
+tide128_per<-tide128_rev/(tide64_rev+wisk64_rev+tide128_rev)
+tide64_per<-tide64_rev/(tide128_rev+wisk64_rev+tide64_rev)
+wisk64_per<-wisk64_rev/(tide64_rev+tide128_rev+wisk64_rev)
+
+total<-tide128_per+tide64_per+wisk64_per
+
 
 ```
 
