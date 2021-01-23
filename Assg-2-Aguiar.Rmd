@@ -32,7 +32,7 @@ $Q_3 =  A_1P_1^{0.7}P_2^{0.4}P_3^{-1.2}$.
 Write down a matrix of price elasticities 
 
 ```{r}
-PE1<- list(-2.5,0.7,1.2)
+PE1<- list(-2.5,0.7,0.7)
 PE2<- list(1.5,-1.5,0.4)
 PE3<- list(1.2,0.5,-1.2)
 
