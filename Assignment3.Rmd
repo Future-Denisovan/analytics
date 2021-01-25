@@ -1,0 +1,421 @@
+---
+title: "Assignment $"
+author: "Your name"
+date: "1/1/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Upload and Explore Data
+
+```{r}
+load(file = "Detergent.RData")
+dt <- detergent_DF
+library(skimr)
+skim(dt)
+head(dt)
+```
+
+## Question 1
+
+# A
+
+```{r}
+#Make Revenue column for each product
+
+dt$T128Revenue <- dt$q_tide128 * dt$p_tide128
+dt$T64Revenue <- dt$q_tide64 * dt$p_tide64
+dt$WiskRevenue <- dt$q_wisk64 * dt$p_wisk64
+
+TotalRevenue <- sum(dt$T128Revenue) + sum(dt$T64Revenue) + sum(dt$WiskRevenue)
+
+T128Rev <- (sum(dt$T128Revenue) / TotalRevenue) * 100
+T64Rev <- (sum(dt$T64Revenue) / TotalRevenue) * 100
+WiskRev <- (sum(dt$WiskRevenue) / TotalRevenue) * 100
+
+TotalRevenue1 <- format(round(TotalRevenue, 2), nsmall = 2)
+T128Rev1 <- format(round(T128Rev, 2), nsmall = 2)
+T64Rev1 <- format(round(T64Rev, 2), nsmall = 2)
+WiskRev1 <- format(round(WiskRev, 2), nsmall = 2)
+
+Mean128 <- mean(dt$p_tide128)
+Mean64 <- mean(dt$p_tide64)
+MeanW <- mean(dt$p_wisk64)
+
+SD128 <- sd(dt$p_tide128)
+SD64 <- sd(dt$p_tide64)
+SDW <- sd(dt$p_wisk64)
+
+Med128 <- median(dt$p_tide128)
+Medn64 <- median(dt$p_tide64)
+MednW <- median(dt$p_wisk64)
+
+library(data.table)
+Marketshare = c(T128Rev1, T64Rev1, WiskRev1)
+MeanPrice = c(Mean128, Mean64, MeanW)
+MedianPrice = c(Med128, Medn64, MednW)
+Std.Dev = c(SD128, SD64, SDW)
+Product <- c("Tide 128 oz", "Tide 64 oz", "Wisk 64 oz")
+
+MarketShare <- data.frame(Product, Marketshare, MeanPrice, MedianPrice, Std.Dev)
+                          
+MarketShare            
+```
+
+# B
+Price Gap
+
+```{r}
+dt$PriceGap1 <- dt$p_tide128 - dt$p_tide64
+dt$PriceGap2 <- dt$p_tide64 - dt$p_wisk64
+
+MeanPG1 <- mean(dt$PriceGap1)
+MeanPG2 <- mean(dt$PriceGap2)
+
+SDPG1 <- sd(dt$PriceGap1)
+SDPG2 <- sd(dt$PriceGap2)
+
+MedPG1 <- median(dt$PriceGap1)
+MedPG2 <- median(dt$PriceGap2)
+
+MeanPriceGap = c(MeanPG1, MeanPG2)
+MedianPriceGap = c(MedPG1, MedPG2)
+Std.DevPriceGap = c(SDPG1, SDPG2)                  
+PriceGap <- c("Tide128- Tide64", "Tide64 - Wisk64") 
+
+PriceGap <- data.frame(PriceGap, MeanPriceGap, MedianPriceGap, Std.DevPriceGap)
+
+PriceGap 
+```
+
+# C
+Hisotgrams
+```{r}
+hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64", xlim = c(0, 8))
+hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64", xlim = c(0, 8))
+
+```
+
+
+# D
+Discussion:
+What do you learn from the price gap histograms and summary statistics for your analysis above? 
+
+The variability between Tide 128 and Tide 64 is much greater than the variability between Tide 64 and Wisk 64.
+
+Is there enough variation in the price gaps across stores and weeks to estimate the cross price elasticities between the two Tide pack sizes and Wisk 64?
+
+I would say there is enough for JUST the two tide packs, but not between Tide 64 and Wisk 64. 
+
+
+## Question 2
+
+# A 
+Sales velocity for Tide 128 and Tide 64
+
+```{r}
+dt$svelocity128 <- (dt$q_tide128/dt$acv)
+dt$svelocity64 <- (dt$q_tide64/dt$acv)
+
+SalesVelocity128 <- sum(dt$svelocity128)
+SalesVelocity64 <- sum(dt$svelocity64)
+
+SalesVelocity128
+SalesVelocity64
+```
+
+# B
+Discussion:
+What is the purpose of dividing unit sales by ACV to construct the dependent variable?
+
+Not all stores sell each product every single week (whether that is due to operational supply difficulties, a lack of data recording, etc...)
+
+By dividing by ACV, this allows us to normalize the data so we can compare the two products equally.
+
+
+# C
+Log linear demand model 
+```{r}
+lm128 = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64), data = dt)
+lm64 = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64), data = dt)
+
+summary(lm128)
+summary(lm64)
+```
+
+
+# D
+Discussion:
+Discuss whether the demand estimates (own and cross price elasticities) make sense. Are the magnitudes
+and signs of the estimated parameters as you would expect? 
+
+This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic. 
+
+OwnPE_128 = -4.57
+OwnPE_64 = -3.9
+
+CrossPE_128 = 0.31
+CrossPE_64 = 1.28
+
+## Question 3
+
+# A
+Time Trend - DO WE NEED TO FACTOR IT? THAT WOULD CREATE 299 DUMMY VARIABLES....
+
+```{r}
+lm128_B = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(week), data = dt)
+lm64_B = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(week), data = dt)
+
+summary(lm128_B)
+summary(lm64_B)
+```
+
+# B
+Discussion:
+Explain why adding a time trend is important here. Discuss whether the demand estimates now make
+sense. Is there an improvement over the model specification in question 2?
+
+Seasonality?
+R-squared gets slightly larger for the first and 7% greater in the second
+
+## Question 4
+
+# A
+
+195/300 weeks had at least one promotion
+
+```{r}
+library(dplyr)
+detergent_promos <- dt %>% select(week, promoflag) %>% 
+  filter(promoflag == 1)
+
+detergent_promos
+
+detergent_DF_2 = subset(detergent_DF, promoflag != 1)
+
+```
+
+
+# B
+
+```{r}
+detergent_DF_2$svelocity128 <- (detergent_DF_2$q_tide128/detergent_DF_2$acv)
+detergent_DF_2$svelocity64 <- (detergent_DF_2$q_tide64/detergent_DF_2$acv)
+
+SalesVelocity128_B <- sum(detergent_DF_2$svelocity128)
+SalesVelocity64_B <- sum(detergent_DF_2$svelocity64)
+
+lm128_C = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(week), data = detergent_DF_2)
+lm64_C = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(week), data = detergent_DF_2)
+
+summary(lm128_C)
+summary(lm64_C)
+
+```
+
+
+# Discussion
+Discuss whether the demand estimates (own and cross price elasticities) now make sense - is there an improvement over the specification in question 3? Provide some intuition for the change in the estimated own-price effects.
+
+
+BEFORE: 
+OwnPE_128 = -4.57
+OwnPE_64 = -3.9
+
+CrossPE_128 = 0.31
+CrossPE_64 = 1.28
+
+AFTER: 
+OwnPE_128 = -3.15
+OwnPE_64 = -1.86
+
+
+CrossPE_128 = -0.0055
+CrossPE_64 = 0.36
+
+## Question 5
+
+Store Fixed Effect
+
+```{r}
+lm128_D = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(week) + factor(store), data = detergent_DF_2)
+lm64_D = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ log(week)+ factor(store), data = detergent_DF_2)
+
+library(broom)
+library(knitr)
+
+lm128_D = tidy(lm128_D)
+lm64_D = tidy(lm64_D)
+
+kable(lm128_D[c(1:4),], digits = 4)
+kable(lm64_D[c(1:4),], digits = 4)
+```
+
+# B
+Discussion:
+Do the estimates of own and cross price elasticties reveal an improvement over the model specification
+in question 4? 
+
+Yes, they are closer together in magnitude and their signs are positive for cross elasticities instead of the same. 
+
+# C 
+
+```{r}
+lm128_E = lm(log(q_tide128) ~ log(p_tide128)+log(p_tide64) + log(week) + factor(store), data = detergent_DF_2)
+lm64_E = lm(log(q_tide64) ~ log(p_tide128)+log(p_tide64) + log(week)+ factor(store), data = detergent_DF_2)
+
+lm128_E = tidy(lm128_E)
+lm64_E = tidy(lm64_E)
+
+kable(lm128_E[c(1:4),], digits = 4)
+kable(lm64_E[c(1:4),], digits = 4)
+```
+
+
+Discussion:
+How do the elasticity estimates and the time trend compare across these two regressions? Is the difference (or absence of a difference) as expected? 
+
+Absence of a difference.....which is interesting. You'd think there would be a difference with taking ACV as a denomitor to normalize the quantity....
+
+## Question 6
+
+r = 25%
+C = 0.25 / oz
+
+Q128 = A128 * P128^(-2.11) * P64^(0.211)
+Q64 = A64 * P128^(1.1627) * P64^(-1.585)
+
+# A
+
+```{r}
+baseprice128 = mean(detergent_DF_2$p_tide128)
+
+```
+
+# B
+```{r}
+baseprice64 = mean(detergent_DF_2$p_tide64)
+```
+
+# C / D
+
+```{r}
+stores = 86
+
+basevolume128 = stores * 52 * mean(detergent_DF_2$q_tide128)
+basevolume64 = stores * 52 * mean(detergent_DF_2$q_tide64)
+
+basevolume128
+
+```
+
+# E
+
+Base Profits:
+pi128=Q_128*(P_128(1-r)-C)
+
+```{r}
+Bprofit128 = basevolume128 * ((baseprice128*0.75) - 0.25)
+Bprofit64 = basevolume64 * ((baseprice64*0.75) - 0.25)
+
+BaseTotalProfit <- Bprofit128 + Bprofit64
+BaseTotalProfit
+
+```
+
+
+# F
+
+Scenario1: 5% increase in price for both 128 and 64
+Scenario2: 5% decrease in price for both 128 and 64
+Scenario3: 5% increase in price 128 and 5% decrease in 64
+Scenario4: 5% decrease in price 128 and 5% increase in 64
+
+r = 25%
+C = 0.25 / oz
+
+Q128 = A128 * P128^(-2.11) * P64^(0.211)
+Q64 = A64 * P128^(1.1627) * P64^(-1.585)
+
+
+```{r}
+pricechange = 0.05
+
+# Specify the function
+demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, basequantity) {
+   
+   # New demand from method 1 
+   quantity_change_1 = ((1 + price_change1)^price_elasticity1) * ((1 + price_change2)^price_elasticity2)
+    
+   #Get new quantity from ratio of new / old 
+   
+   NewQuantity = quantity_change_1 * basequantity
+   
+   # Return results as a list
+   return(NewQuantity)
+}
+
+```
+
+Running the Function
+```{r}
+New_Q128_1 <- demand_change(0.05, 0.05, -2.11, 0.211, basevolume128)
+New_Q64_1 <- demand_change(0.05,0.05,1.16,-1.585, basevolume64)
+
+New_Q128_2 <- demand_change(-0.05, -0.05, -2.11, 0.211, basevolume128)
+New_Q64_2 <- demand_change(-0.05,-0.05,1.16,-1.585, basevolume64)
+
+New_Q128_3 <- demand_change(0.05, 0.05, -2.11, 0.211, basevolume128)
+New_Q64_3 <- demand_change(-0.05,-0.05,1.16,-1.585, basevolume64)
+
+New_Q128_4 <- demand_change(-0.05, -0.05, -2.11, 0.211, basevolume128)
+New_Q64_4 <- demand_change(0.05,0.05,1.16,-1.585, basevolume64)
+
+```
+
+# G
+```{r}
+#Total Profit calculations
+TotalProfit1 <- (New_Q128_1* (baseprice128*1.05))*(New_Q64_1* (baseprice64*1.05))
+
+TotalProfit2 <- (New_Q128_2*(baseprice128*0.95))*(New_Q64_2* (baseprice64*0.95))
+
+TotalProfit3 <- (New_Q128_3*(baseprice128*1.05))*(New_Q64_3*(baseprice64*0.95))
+
+TotalProfit4 <- (New_Q128_4*(baseprice128*0.95))*(New_Q64_4* (baseprice64*1.05))
+```
+
+
+: Table of quantities sold and profits when Tide changes the price of Tide 64 and 128. Price changes are shown in percentages
+
+```{r}
+del_price_128 = c(0.05, -0.05, 0.05, -0.05)
+del_price_64 = c(0.05, -0.05, -0.05, 0.05)
+q_128 = c(New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
+q_64 = c(New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
+TotalProfits = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
+
+NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64, TotalProfits)
+
+NewTable
+```
+
+
+## Question 7
+
+a. What is the extent of cannibalization within the Tide product line? 
+b. Does Tide face a competitive threat from Wisk? 
+c. How do you evaluate the current pricing tactics? Do you recommend changes? 
+
+
+
+
+
+
+
+
+
+
