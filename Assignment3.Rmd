@@ -112,15 +112,15 @@ PriceGap
 +===============+===============+=============+===========+
 | Tide128-Tide64|   3.9877679   |  4.094000   |  0.8705   | 
 +---------------+---------------+-------------+-----------+
-| Tide64 -Wisk64|  0.3034887    |  0.260714	 |  0.5859   |
+| Tide64 -Wisk64|   0.3034887   |  0.260714	 |  0.5859   |
 +---------------+---------------+-------------+-----------+
 
 
 # C
 Histograms
 ```{r}
-hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64", xlim = c(0, 8))
-hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64", xlim = c(0, 8))
+hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64")
+hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64")
 
 ```
 
