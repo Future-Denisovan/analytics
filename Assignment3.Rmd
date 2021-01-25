@@ -1,12 +1,17 @@
 ---
-title: "Assignment $"
-author: "Your name"
-date: "1/1/2021"
+title: 'Assignment 3'
+author: "Annie Beyer and Caleb Aguiar"
+date: "January 2021"
+output: word_document
+urlcolor: blue
 output: word_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+install.packages('devtools')
+devtools::install_github("ropensci/skimr")
+
 ```
 
 ##Upload and Explore Data
@@ -64,6 +69,22 @@ MarketShare <- data.frame(Product, Marketshare, MeanPrice, MedianPrice, Std.Dev)
                           
 MarketShare            
 ```
+
+
+Q1a: Table of marketshare (in percentage) and price statistics (in dollars)
+
++---------------+---------------+-------------+--------------+-----------+
+| Product       | Marketshare   | Mean Price  | Median Price | Std. Dev |          
++===============+===============+=============+==============+===========+
+| Tide 128 oz   |      56.9%    |   8.36      |    8.48      |  .76      |
++---------------+---------------+-------------+--------------+-----------+
+| Tide 64 oz    |      26.3%    |   4.36      |    4.42      |  .40      |
++---------------+---------------+-------------+--------------+-----------+
+| Wisk 64 oz    |      16.8%    |   4.07      |    4.19      |  .49      |
++---------------+---------------+-------------+--------------+-----------+
+
+
+
 
 # B
 Price Gap
