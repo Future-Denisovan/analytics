@@ -1,7 +1,7 @@
 ---
-title: "Assignment $"
-author: "Your name"
-date: "1/1/2021"
+title: "Assignment 3"
+author: "Annie Beyer and Caleb Aguiar"
+date: "1/25/2021"
 output: word_document
 ---
 
@@ -27,6 +27,14 @@ library(psych)
 
 describe(detergent_DF)
 
+Product<-c("Tide 128","Tide 64","Wisk 64")
+Revenue<-c(tide128_rev,tide64_rev,wisk64_rev)
+Marketshare_Percent<-c(tide128_per,tide64_per,wisk64_per)
+
+Marketshare_table<-data.frame(Product,Revenue,Marketshare_Percent)
+
+Marketshare_table
+
 ```
 
 
@@ -38,11 +46,11 @@ Perform the analysis for Q1 and the fill out this Table.
 +---------------+---------------+-------------+--------------+-----------+
 | Product       | Marketshare   | Mean Price  | Median Price | Std. Dev |          
 +===============+===============+=============+==============+===========+
-| Tide 128 oz   |               |             |              |           |
+| Tide 128 oz   |     .569      |   8.36      |    8.48      |  .76      |
 +---------------+---------------+-------------+--------------+-----------+
-| Tide 64 oz    |               |             |              |           |
+| Tide 64 oz    |     .263      |   4.36      |    4.42      |  .40      |
 +---------------+---------------+-------------+--------------+-----------+
-| Wisk 64 oz    |               |             |              |           |
+| Wisk 64 oz    |     .168      |   4.07      |    4.19      |  .49      |
 +---------------+---------------+-------------+--------------+-----------+
 
 
