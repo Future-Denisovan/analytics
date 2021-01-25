@@ -38,20 +38,31 @@ Marketshare_table
 ```
 
 
-
-Perform the analysis for Q1 and the fill out this Table.
-
-: Table of marketshare (in percentage) and price statistics (in dollars)
+Q1a: Table of marketshare (in percentage) and price statistics (in dollars)
 
 +---------------+---------------+-------------+--------------+-----------+
 | Product       | Marketshare   | Mean Price  | Median Price | Std. Dev |          
 +===============+===============+=============+==============+===========+
-| Tide 128 oz   |     .569      |   8.36      |    8.48      |  .76      |
+| Tide 128 oz   |      56.9%    |   8.36      |    8.48      |  .76      |
 +---------------+---------------+-------------+--------------+-----------+
-| Tide 64 oz    |     .263      |   4.36      |    4.42      |  .40      |
+| Tide 64 oz    |      26.3%    |   4.36      |    4.42      |  .40      |
 +---------------+---------------+-------------+--------------+-----------+
-| Wisk 64 oz    |     .168      |   4.07      |    4.19      |  .49      |
+| Wisk 64 oz    |      16.8%    |   4.07      |    4.19      |  .49      |
 +---------------+---------------+-------------+--------------+-----------+
+
+Q1b: Generate two new variables that capture the price gap between Tide 128 and Tide 64 and Wisk 64. Report the mean, median and std dev of the two price gap variables across store-weeks.
+
+```{r}
+detergent_DF$prc_gp_Tide_128_to_64<-detergent_DF$p_tide128-detergent_DF$p_tide64 
+
+detergent_DF$prc_gp_Tide_64_to_Wisk_64<-detergent_DF$p_wisk64-detergent_DF$p_tide64 
+
+aggregate(detergent_DF$prc_gp_Tide_128_to_64, by=list(Store = detergent_DF$store), FUN=median)
+
+```
+
+
+
 
 
 ## Question 6
