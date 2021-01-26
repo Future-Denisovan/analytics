@@ -214,7 +214,7 @@ CrossPE_64 = 1.28 Elastic
 Time Trend 
 
 ```{r}
-dt$week<-as.factor(dt$week)#Factor and create dummy variables
+dt$week<-as.integer(dt$week)
 lm128_B <- lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 lm64_B <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 
@@ -224,43 +224,31 @@ lm64_Ba<-tidy(lm64_B)
 kable(lm128_Ba[c(1:3),], digits = 4)
 kable(lm64_Ba[c(1:3),], digits = 4)
 
-```
+summary(lm128_B)
+summary(lm64_B)
 
-```{r}
-#Don't run this unless you want all the dummies printed
-#summary(lm128_B)
-#summary(lm64_B)
+
 ```
 
 # B
 Discussion:
 Explain why adding a time trend is important here. Discuss whether the demand estimates now make sense. Is there an improvement over the model specification in question 2?
 
-Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a much more accurate model.
+Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a more accurate model.
 
-See the table below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture between roughly 40-60% more of the variation.
+See the table below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture between roughly 8-10% more of the variation.
 
 +-------------------+---------------+-------------------+-----------------+
 | Tide64 Linear-Log | Tide64 w/Time | Tide128Linear-Log | Tide 128 w/Time |         
 +===================+===============+===================+=================+
-| R^2       0.2657  | R^2    0.6917 | R^2       0.2072  | R^2     0.808   | 
+| R^2       0.2657  | R^2    0.357  | R^2       0.2072  | R^2     0.2822  | 
 +-------------------+---------------+-------------------+-----------------+
-
-I like graphs, so see below for a graph of the coefficients in relation to each week. There is clearly some cyclical seasonal pattern for Tide64 and Tide128. We're primarily interested in the width of the confidence interval here for each coefficient. After about week 187, both models become less confident in its predictions based on the week. 
-
-```{r}
-par(mfrow=c(1,2))
-coefplot(lm64_B)#Purpose of arm package
-coefplot(lm128_B)
-par(mfrow=c(1,1))
-
-```
 
 ## Question 4
 
 # A
 
-195/300 weeks had at least one promotion
+195/300 weeks had at least one promotion ####?????#####******
 
 ```{r}
 library(dplyr)
@@ -380,7 +368,7 @@ Absence of a difference.....which is interesting. You'd think there would be a d
 
 ####
 So the cross price elasticity changes for Tide 64's quantity in relation to Tide 128's price. 
-It goes from -1.78 to 1.16 (changing signs!) which means that
+
 
 
 
