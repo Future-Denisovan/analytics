@@ -1,6 +1,6 @@
 ---
 title: 'Assignment 3'
-author: "Annie Beyer and Caleb Aguiar"
+author: "Annie Beyer & Caleb Aguiar"
 date: "January 2021"
 output: word_document
 urlcolor: blue
