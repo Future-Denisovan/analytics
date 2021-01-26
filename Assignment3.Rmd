@@ -317,6 +317,8 @@ CrossPE_64 = 0.36
 
 Store Fixed Effect
 
+# A
+
 ```{r}
 lm128_D<-lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week + factor(store), data = detergent_DF_2)
 lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ week+ factor(store), data = detergent_DF_2)
@@ -327,8 +329,18 @@ library(knitr)
 lm128_D <- tidy(lm128_D)
 lm64_D <- tidy(lm64_D)
 
-kable(lm128_D[c(1:4),], digits = 4)
+
+
 kable(lm64_D[c(1:4),], digits = 4)
+kable(lm64_Ca[c(1:3),], digits = 4)
+
+
+kable(lm128_D[c(1:4),], digits = 4)
+kable(lm128_Ca[c(1:3),], digits = 4)
+
+
+
+
 ```
 
 # B
@@ -336,7 +348,7 @@ Discussion:
 Do the estimates of own and cross price elasticties reveal an improvement over the model specification
 in question 4? 
 
-Yes, they are closer together in magnitude and their signs are positive for cross elasticities instead of the same. 
+Yes, cross price elasticities originally were extremely small numbers, .0039 and .049. This would suggest that the within brand detergent was very inelastic, and not doing much to change the demand. We improved the model for both own and cross, and we can see that here.
 
 # C 
 
@@ -347,15 +359,11 @@ lm64_E = lm(log(q_tide64) ~ log(p_tide128)+log(p_tide64) + log(week)+ factor(sto
 lm128_E = tidy(lm128_E)
 lm64_E = tidy(lm64_E)
 
-kable(lm128_Ca[c(1:3),], digits = 4)
+kable(lm128_D[c(1:3),], digits = 4)
 kable(lm128_E[c(1:3),], digits = 4)
 
-
-kable(lm64_Ca[c(1:3),], digits = 4)
+kable(lm64_D[c(1:3),], digits = 4)
 kable(lm64_E[c(1:3),], digits = 4)
-
-
-
 
 ```
 
@@ -363,12 +371,7 @@ kable(lm64_E[c(1:3),], digits = 4)
 Discussion:
 How do the elasticity estimates and the time trend compare across these two regressions? Is the difference (or absence of a difference) as expected? 
 
-Absence of a difference.....which is interesting. You'd think there would be a difference with taking ACV as a denominator to normalize the quantity....
-
-
-####
-So the cross price elasticity changes for Tide 64's quantity in relation to Tide 128's price. 
-
+Not much of a difference here, using unit sales instead of velocity did not have much of an effect. This doesn't make sense conceptually, large stores and small stores should have variation between them. When we removed our velocity it barely changed the elasticities.
 
 
 
@@ -395,12 +398,13 @@ baseprice64 = mean(detergent_DF_2$p_tide64)
 # C / D
 
 ```{r}
-stores = 86
+stores <- length(unique(detergent_DF_2$store))
 
 basevolume128 = stores * 52 * mean(detergent_DF_2$q_tide128)
 basevolume64 = stores * 52 * mean(detergent_DF_2$q_tide64)
 
 basevolume128
+basevolume64
 
 ```
 
@@ -490,9 +494,15 @@ q_128 = c(New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
 q_64 = c(New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 TotalProfits = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
 
-NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64, TotalProfits)
+Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
+
+NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfits)
 
 NewTable
+
+plot(NewTable$Price_Change, NewTable$TotalProfits, pch=19)
+
+
 ```
 
 
