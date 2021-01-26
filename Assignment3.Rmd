@@ -139,20 +139,17 @@ Discussion:
 What do you learn from the price gap histograms and summary statistics for your analysis above? 
 
 Examining the revenue market share, Tide 128oz is about double the price, and double the amount of revenue of Tide 64oz. 
+
 This would suggest that the number of purchases made of each product is the same.
 
 Tide 64 is more expensive than Wisk 64 on average.
 
-
-
-
-
-
-The variability between Tide 128 and Tide 64 is much greater than the variability between Tide 64 and Wisk 64. 
+The variability between Tide 128 and Tide 64 is less than the variability between Tide 64 and Wisk 64. 
 
 Is there enough variation in the price gaps across stores and weeks to estimate the cross price elasticities between the two Tide pack sizes and Wisk 64?
 
-I would say there is enough for JUST the two tide packs, but not between Tide 64 and Wisk 64. 
+Absolutely, we have 10
+
 
 
 ## Question 2
@@ -175,9 +172,8 @@ SalesVelocity64
 Discussion:
 What is the purpose of dividing unit sales by ACV to construct the dependent variable?
 
-Not all stores sell each product every single week (whether that is due to operational supply difficulties, a lack of data recording, etc...)
 
-By dividing by ACV, this allows us to normalize the data so we can compare the two products equally.
+The ACV is a measure of how large the store is. By dividing by ACV, this allows us to normalize the data so we can compare the two products equally. We would expect a larger store to be more sensitive to price changes, as customers are more interested in price at a large store, while customers at a small store are more likely to prioritize the convenience of the location. Additionally, not all stores may sell each product every single week (whether that is due to operational supply difficulties, a lack of data recording, etc...)
 
 
 # C
@@ -202,10 +198,9 @@ barplot(pe_graph, main = "Price Elasticity", xlab = "Tide64's price elasticities
 
 # D
 Discussion:
-Discuss whether the demand estimates (own and cross price elasticities) make sense. Are the magnitudes
-and signs of the estimated parameters as you would expect? 
+Discuss whether the demand estimates (own and cross price elasticities) make sense. Are the magnitudes and signs of the estimated parameters as you would expect? 
 
-This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. Tide128 demand is only slightly sensitive to change in Tide64 price. 
+This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. Tide128 demand is only slightly sensitive to change in Tide64 price. This does not make a lot of sense, because their price gap is sometimes at zero, and if that is the case customers are going to be falling over themselves to buy the Tide128 and not bother with Tide64. We need to examine if there is something going on here, is there more affluent locations where Tide64 is selling the same as Tide128 at a lower income area, or is there a seasonal element where people buy more Tide when they wash more clothes from sweating.
 
 OwnPE_128 = -4.57 Elastic
 OwnPE_64 = -3.9 Elastic
@@ -220,23 +215,30 @@ Time Trend
 
 ```{r}
 dt$week<-as.factor(dt$week)#Factor and create dummy variables
-lm128_B = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
-lm64_B = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
+lm128_B <- lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
+lm64_B <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 
-summary(lm128_B) 
-summary(lm64_B)
-#kable might be good use for this
-   
+lm128_Ba<-tidy(lm128_B) 
+lm64_Ba<-tidy(lm64_B)
+
+kable(lm128_Ba[c(1:3),], digits = 4)
+kable(lm64_Ba[c(1:3),], digits = 4)
+
+```
+
+```{r}
+#Don't run this unless you want all the dummies printed
+#summary(lm128_B)
+#summary(lm64_B)
 ```
 
 # B
 Discussion:
-Explain why adding a time trend is important here. Discuss whether the demand estimates now make
-sense. Is there an improvement over the model specification in question 2?
+Explain why adding a time trend is important here. Discuss whether the demand estimates now make sense. Is there an improvement over the model specification in question 2?
 
-Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. 
+Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a much more accurate model.
 
-See the model below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture for between roughly 40-60% more of the variation.
+See the table below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture between roughly 40-60% more of the variation.
 
 +-------------------+---------------+-------------------+-----------------+
 | Tide64 Linear-Log | Tide64 w/Time | Tide128Linear-Log | Tide 128 w/Time |         
@@ -244,24 +246,15 @@ See the model below for a comparison of the multiple R squared values. Once we i
 | R^2       0.2657  | R^2    0.6917 | R^2       0.2072  | R^2     0.808   | 
 +-------------------+---------------+-------------------+-----------------+
 
-I like graphs, so see below for a graph of the coefficients regarding weeks
+I like graphs, so see below for a graph of the coefficients in relation to each week. There is clearly some cyclical seasonal pattern for Tide64 and Tide128. We're primarily interested in the width of the confidence interval here for each coefficient. After about week 187, both models become less confident in its predictions based on the week. 
 
 ```{r}
 par(mfrow=c(1,2))
-
-
 coefplot(lm64_B)#Purpose of arm package
 coefplot(lm128_B)
 par(mfrow=c(1,1))
+
 ```
-
-
-Seasonality-Maybe we should look at this quarterly.
-
-
-
-
-
 
 ## Question 4
 
@@ -274,7 +267,15 @@ library(dplyr)
 detergent_promos <- dt %>% select(week, promoflag) %>% 
   filter(promoflag == 1)
 
-detergent_promos
+totalweeks<-length(unique(dt$week))
+
+promoweeks<-length(unique(detergent_promos$week))
+
+store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
+
+store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
+
+sum(dt$promoflag)
 
 detergent_DF_2 = subset(detergent_DF, promoflag != 1)
 
@@ -290,11 +291,17 @@ detergent_DF_2$svelocity64 <- (detergent_DF_2$q_tide64/detergent_DF_2$acv)
 SalesVelocity128_B <- sum(detergent_DF_2$svelocity128)
 SalesVelocity64_B <- sum(detergent_DF_2$svelocity64)
 
-lm128_C = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(week), data = detergent_DF_2)
-lm64_C = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(week), data = detergent_DF_2)
+lm128_C = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + factor(week), data = detergent_DF_2)
+lm64_C = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + factor(week), data = detergent_DF_2)
 
-summary(lm128_C)
-summary(lm64_C)
+#summary(lm128_C)
+#summary(lm64_C)
+
+lm128_Ca<-tidy(lm128_C)
+lm64_Ca<-tidy(lm64_C)
+
+kable(lm128_Ca[c(1:3),], digits = 4)
+kable(lm64_Ca[c(1:3),], digits = 4)
 
 ```
 
@@ -323,14 +330,14 @@ CrossPE_64 = 0.36
 Store Fixed Effect
 
 ```{r}
-lm128_D = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(week) + factor(store), data = detergent_DF_2)
-lm64_D = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ log(week)+ factor(store), data = detergent_DF_2)
+lm128_D<-lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + factor(week) + factor(store), data = detergent_DF_2)
+lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ factor(week)+ factor(store), data = detergent_DF_2)
 
 library(broom)
 library(knitr)
 
-lm128_D = tidy(lm128_D)
-lm64_D = tidy(lm64_D)
+lm128_D <- tidy(lm128_D)
+lm64_D <- tidy(lm64_D)
 
 kable(lm128_D[c(1:4),], digits = 4)
 kable(lm64_D[c(1:4),], digits = 4)
