@@ -225,7 +225,7 @@ lm64_B = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 
 summary(lm128_B) 
 summary(lm64_B)
-
+#kable might be good use for this
    
 ```
 
@@ -236,7 +236,7 @@ sense. Is there an improvement over the model specification in question 2?
 
 Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. 
 
-See the model below for a comparision of the multiple R squared values. Once we implemented for time, our model did was able to capture for between roughly 40-60% more of the variation.
+See the model below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture for between roughly 40-60% more of the variation.
 
 +-------------------+---------------+-------------------+-----------------+
 | Tide64 Linear-Log | Tide64 w/Time | Tide128Linear-Log | Tide 128 w/Time |         
@@ -244,7 +244,24 @@ See the model below for a comparision of the multiple R squared values. Once we 
 | R^2       0.2657  | R^2    0.6917 | R^2       0.2072  | R^2     0.808   | 
 +-------------------+---------------+-------------------+-----------------+
 
-Seasonality-
+I like graphs, so see below for a graph of the coefficients regarding weeks
+
+```{r}
+par(mfrow=c(1,2))
+
+
+coefplot(lm64_B)#Purpose of arm package
+coefplot(lm128_B)
+par(mfrow=c(1,1))
+```
+
+
+Seasonality-Maybe we should look at this quarterly.
+
+
+
+
+
 
 ## Question 4
 
