@@ -20,6 +20,8 @@ devtools::install_github("ropensci/skimr")
 load(file = "Detergent.RData")
 dt <- detergent_DF
 library(skimr)
+library(psych)
+library(ggplot2)
 skim(dt)
 head(dt)
 ```
@@ -66,6 +68,8 @@ Std.Dev = c(SD128, SD64, SDW)
 Product <- c("Tide 128 oz", "Tide 64 oz", "Wisk 64 oz")
 
 MarketShare <- data.frame(Product, Marketshare, MeanPrice, MedianPrice, Std.Dev)
+
+describe(dt)
                           
 MarketShare            
 ```
@@ -119,9 +123,12 @@ PriceGap
 # C
 Histograms
 ```{r}
+par(mfrow=c(1,2))#Set the plotting area into a 1*2 array
+
 hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64")
 hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64")
 
+par(mfrow=c(1,1))
 ```
 
 
@@ -129,7 +136,17 @@ hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($
 Discussion:
 What do you learn from the price gap histograms and summary statistics for your analysis above? 
 
-The variability between Tide 128 and Tide 64 is much greater than the variability between Tide 64 and Wisk 64.
+Examining the revenue market share, Tide 128oz is about double the price, and double the amount of revenue of Tide 64oz. 
+This would suggest that the number of purchases made of each product is the same.
+
+Tide 64 is more expensive than Wisk 64 on average.
+
+
+
+
+
+
+The variability between Tide 128 and Tide 64 is much greater than the variability between Tide 64 and Wisk 64. 
 
 Is there enough variation in the price gaps across stores and weeks to estimate the cross price elasticities between the two Tide pack sizes and Wisk 64?
 
@@ -188,11 +205,12 @@ CrossPE_64 = 1.28
 ## Question 3
 
 # A
-Time Trend - DO WE NEED TO FACTOR IT? THAT WOULD CREATE 299 DUMMY VARIABLES....
+Time Trend 
 
 ```{r}
-lm128_B = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(week), data = dt)
-lm64_B = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(week), data = dt)
+dt$week<-as.factor(dt$week)#Factor and create dummy variables
+lm128_B = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
+lm64_B = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 
 summary(lm128_B)
 summary(lm64_B)
