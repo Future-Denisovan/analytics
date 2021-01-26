@@ -488,19 +488,24 @@ TotalProfit4 <- (New_Q128_4*(baseprice128*0.95))*(New_Q64_4* (baseprice64*1.05))
 : Table of quantities sold and profits when Tide changes the price of Tide 64 and 128. Price changes are shown in percentages
 
 ```{r}
+library(scales)
 del_price_128 = c(0.05, -0.05, 0.05, -0.05)
 del_price_64 = c(0.05, -0.05, -0.05, 0.05)
 q_128 = c(New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
 q_64 = c(New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 TotalProfits = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
 
+
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
 
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfits)
 
 NewTable
-#Blah Bhlah
 plot(NewTable$Price_Change, NewTable$TotalProfits)
+ggplot(data = NewTable, aes(Price_Change,TotalProfits))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)
+
+
+
 
 
 ```
