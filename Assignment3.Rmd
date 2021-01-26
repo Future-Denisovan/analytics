@@ -9,8 +9,9 @@ output: word_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-install.packages('devtools')
-devtools::install_github("ropensci/skimr")
+#install.packages('devtools')#Packages required
+#devtools::install_github("ropensci/skimr")
+#install.packages('arm')#to plot coefficients 
 
 ```
 
@@ -22,6 +23,7 @@ dt <- detergent_DF
 library(skimr)
 library(psych)
 library(ggplot2)
+library(arm)
 skim(dt)
 head(dt)
 ```
@@ -186,6 +188,15 @@ lm64 = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64), data = dt)
 
 summary(lm128)
 summary(lm64)
+
+lm128_coef<- summary(lm128)$coefficients
+lm64_coef<-summary(lm64)$coefficients#Lets graph these coefficients so we can see all these at a glance
+
+pe_graph<-c(lm64_coef[2:3,1],lm128_coef[2:3,1])
+pe_graph
+
+barplot(pe_graph, main = "Price Elasticity", xlab = "Tide64's price elasticities              Tide128's price elasticities", col = rainbow(4), names.arg = c('Cross','Own', 'Own','Cross' ))
+
 ```
 
 
@@ -194,13 +205,13 @@ Discussion:
 Discuss whether the demand estimates (own and cross price elasticities) make sense. Are the magnitudes
 and signs of the estimated parameters as you would expect? 
 
-This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic. 
+This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. Tide128 demand is only slightly sensitive to change in Tide64 price. 
 
-OwnPE_128 = -4.57
-OwnPE_64 = -3.9
+OwnPE_128 = -4.57 Elastic
+OwnPE_64 = -3.9 Elastic
 
-CrossPE_128 = 0.31
-CrossPE_64 = 1.28
+CrossPE_128 = 0.31 Not that elastic, this is similar to addictive substances
+CrossPE_64 = 1.28 Elastic
 
 ## Question 3
 
@@ -212,8 +223,10 @@ dt$week<-as.factor(dt$week)#Factor and create dummy variables
 lm128_B = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 lm64_B = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = dt)
 
-summary(lm128_B)
+summary(lm128_B) 
 summary(lm64_B)
+
+   
 ```
 
 # B
@@ -221,8 +234,17 @@ Discussion:
 Explain why adding a time trend is important here. Discuss whether the demand estimates now make
 sense. Is there an improvement over the model specification in question 2?
 
-Seasonality?
-R-squared gets slightly larger for the first and 7% greater in the second
+Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. 
+
+See the model below for a comparision of the multiple R squared values. Once we implemented for time, our model did was able to capture for between roughly 40-60% more of the variation.
+
++-------------------+---------------+-------------------+-----------------+
+| Tide64 Linear-Log | Tide64 w/Time | Tide128Linear-Log | Tide 128 w/Time |         
++===================+===============+===================+=================+
+| R^2       0.2657  | R^2    0.6917 | R^2       0.2072  | R^2     0.808   | 
++-------------------+---------------+-------------------+-----------------+
+
+Seasonality-
 
 ## Question 4
 
