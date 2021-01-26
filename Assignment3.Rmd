@@ -499,8 +499,8 @@ Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|")
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfits)
 
 NewTable
-
-plot(NewTable$Price_Change, NewTable$TotalProfits, pch=19)
+#Blah Bhlah
+plot(NewTable$Price_Change, NewTable$TotalProfits)
 
 
 ```
