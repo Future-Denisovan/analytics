@@ -291,8 +291,8 @@ detergent_DF_2$svelocity64 <- (detergent_DF_2$q_tide64/detergent_DF_2$acv)
 SalesVelocity128_B <- sum(detergent_DF_2$svelocity128)
 SalesVelocity64_B <- sum(detergent_DF_2$svelocity64)
 
-lm128_C = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + factor(week), data = detergent_DF_2)
-lm64_C = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + factor(week), data = detergent_DF_2)
+lm128_C = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week, data = detergent_DF_2)
+lm64_C = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + week, data = detergent_DF_2)
 
 #summary(lm128_C)
 #summary(lm64_C)
@@ -330,8 +330,8 @@ CrossPE_64 = 0.36
 Store Fixed Effect
 
 ```{r}
-lm128_D<-lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + factor(week) + factor(store), data = detergent_DF_2)
-lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ factor(week)+ factor(store), data = detergent_DF_2)
+lm128_D<-lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + week + factor(store), data = detergent_DF_2)
+lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ week+ factor(store), data = detergent_DF_2)
 
 library(broom)
 library(knitr)
@@ -359,15 +359,30 @@ lm64_E = lm(log(q_tide64) ~ log(p_tide128)+log(p_tide64) + log(week)+ factor(sto
 lm128_E = tidy(lm128_E)
 lm64_E = tidy(lm64_E)
 
-kable(lm128_E[c(1:4),], digits = 4)
-kable(lm64_E[c(1:4),], digits = 4)
+kable(lm128_Ca[c(1:3),], digits = 4)
+kable(lm128_E[c(1:3),], digits = 4)
+
+
+kable(lm64_Ca[c(1:3),], digits = 4)
+kable(lm64_E[c(1:3),], digits = 4)
+
+
+
+
 ```
 
 
 Discussion:
 How do the elasticity estimates and the time trend compare across these two regressions? Is the difference (or absence of a difference) as expected? 
 
-Absence of a difference.....which is interesting. You'd think there would be a difference with taking ACV as a denomitor to normalize the quantity....
+Absence of a difference.....which is interesting. You'd think there would be a difference with taking ACV as a denominator to normalize the quantity....
+
+
+####
+So the cross price elasticity changes for Tide 64's quantity in relation to Tide 128's price. 
+It goes from -1.78 to 1.16 (changing signs!) which means that
+
+
 
 ## Question 6
 
