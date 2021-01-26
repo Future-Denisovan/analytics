@@ -127,8 +127,10 @@ Histograms
 ```{r}
 par(mfrow=c(1,2))#Set the plotting area into a 1*2 array
 
-hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64")
-hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64")
+#Set axis to the same for better comparison
+hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64",
+     xlim = c(-3,8))
+hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64", xlim = c(-3,8))
 
 par(mfrow=c(1,1))
 ```
