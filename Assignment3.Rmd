@@ -24,6 +24,8 @@ library(skimr)
 library(psych)
 library(ggplot2)
 library(arm)
+library(broom)
+library(knitr)
 skim(dt)
 head(dt)
 ```
