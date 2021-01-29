@@ -181,8 +181,8 @@ The ACV is a measure of how large the store is. By dividing by ACV, this allows 
 # C
 Log linear demand model 
 ```{r}
-lm128 = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64), data = dt)
-lm64 = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64), data = dt)
+lm128 = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64), data = dt)
+lm64 = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64), data = dt)
 
 summary(lm128)
 summary(lm64)
@@ -202,13 +202,18 @@ barplot(pe_graph, main = "Price Elasticity", xlab = "Tide64's price elasticities
 Discussion:
 Discuss whether the demand estimates (own and cross price elasticities) make sense. Are the magnitudes and signs of the estimated parameters as you would expect? 
 
-This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. Tide128 demand is only slightly sensitive to change in Tide64 price. This does not make a lot of sense, because their price gap is sometimes at zero, and if that is the case customers are going to be falling over themselves to buy the Tide128 and not bother with Tide64. We need to examine if there is something going on here, is there more affluent locations where Tide64 is selling the same as Tide128 at a lower income area, or is there a seasonal element where people buy more Tide when they wash more clothes from sweating.
+OwnPE_128 = -4.59 Elastic, negative
+OwnPE_64 = -3.74 Elastic, negative
 
-OwnPE_128 = -4.57 Elastic
-OwnPE_64 = -3.9 Elastic
-
-CrossPE_128 = 0.31 Not that elastic, this is similar to addictive substances
+CrossPE_128 = 0.31 Inelastic, positive. This is similar to addictive substances
 CrossPE_64 = 1.28 Elastic
+Cross_PE_128 & Wisk = 0.15 Inelastic, positive
+Cross_PE_64 & Wisk = -0.87 Inelastic, negative
+
+This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. This suggests that as Tides own price increases, it's demand goes down by a lot and Tide 64's demand increases a little as well as the demand for Wisk, but not as much. However, when Tide 64's own price increases, its demand decreases, and Tide128 demand increases but only slightly. However, Wisk's demand decreases.
+
+This does not make a lot of sense, because their price gap is sometimes at zero, and if that is the case customers are going to be falling over themselves to buy the Tide128 and not bother with Tide64. We need to examine if there is something going on here, is there more affluent locations where Tide64 is selling the same as Tide128 at a lower income area, or is there a seasonal element where people buy more Tide when they wash more clothes from sweating.
+
 
 ## Question 3
 
