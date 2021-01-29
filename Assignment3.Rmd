@@ -210,7 +210,7 @@ CrossPE_64 = 1.28 Elastic
 Cross_PE_128 & Wisk = 0.15 Inelastic, positive
 Cross_PE_64 & Wisk = -0.87 Inelastic, negative
 
-This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. This suggests that as Tides own price increases, it's demand goes down by a lot and Tide 64's demand increases a little as well as the demand for Wisk, but not as much. However, when Tide 64's own price increases, its demand decreases, and Tide128 demand increases but only slightly. However, Wisk's demand decreases.
+This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. This suggests that as Tides own price increases, it's demand goes down by a lot and Tide 64's prices increases a little as well as the price for Wisk, but not as much. However, when Tide 64's  demand increases, its own price decreases, and Tide128 prices increase but only slightly. However, Wisk's price decreases.
 
 This does not make a lot of sense, because their price gap is sometimes at zero, and if that is the case customers are going to be falling over themselves to buy the Tide128 and not bother with Tide64. We need to examine if there is something going on here, is there more affluent locations where Tide64 is selling the same as Tide128 at a lower income area, or is there a seasonal element where people buy more Tide when they wash more clothes from sweating.
 
@@ -323,7 +323,7 @@ CrossPE_64 = -0.1158
 Cross_PE_128 & Wisk = 0.7142
 Cross_PE_64 & Wisk = -0.5189
 
-The own price effects have decreased significantly, and also the gap between the two have increased as well. Now, Tide 128 is highly elastic while Tide 64 is mildly elastic. Additionally, as Tide 128 price increases, demand for Tide 64 decreases and demand for Wisk 64 increases. As Tide 64 prices increase, demand for Tide 128 increases and demand for Wisk decreases.It is still interesting that if demand increases for either Tide product, the demand for the opposite Tide product and for the Wisk product are not sharing the same sign (go in opposite directions).
+The own price effects have decreased significantly, and also the gap between the two have increased as well. Now, Tide 128 is highly elastic while Tide 64 is mildly elastic. Additionally, as Tide 128 demand increases, prices for Tide 64 decreases and price for Wisk 64 increases. As Tide 64 demand increase, prices for Tide 128 increases and prices for Wisk decreases.It is still interesting that if demand increases for either Tide product, the prices for the opposite Tide product and for the Wisk product are not sharing the same sign (go in opposite directions).
 
 ## BEST GUESS?
 
@@ -363,7 +363,7 @@ Discussion:
 Do the estimates of own and cross price elasticties reveal an improvement over the model specification
 in question 4? 
 
-Yes, the own and cross price elasticities decrease from Question 4's model to this model for Tide 64. For Tide 128, it's own price elasticity decreases and more noteably, the cross price elasticity for tide 64 changes sign from negative to positive, which finally makes more sense. This means that as prices for Tide 128 increase, the demand for Tide 64 increases only slightly and for Wisk 64 increases more significantly while the demand for Tide 128 decreases. As prices increase for Tide 64, demand for Tide 128 increases slightly while demand decreases slightly for Wisk 64 and decreases more for Tide 64. This makes more sense beceause if there are price changes for a 64 size product, people might feel like they're getting a better deal for Tide 128 which is double the size of Tide 64 but now "cheaper".  
+Yes, the own and cross price elasticities decrease from Question 4's model to this model for Tide 64. For Tide 128, it's own price elasticity decreases and more noteably, the cross price elasticity for tide 64 changes sign from negative to positive, which finally makes more sense. This means that as the demand for Tide 128 increase, the price for Tide 64 increases only slightly and for Wisk 64 increases more significantly while the price for Tide 128 decreases. As the demand increases for Tide 64, the price for Tide 128 increases slightly while prices decrease slightly for Wisk 64 and decreases more for Tide 64. This makes more sense beceause if there are price changes for a 64 size product, people might feel like they're getting a better deal for Tide 128 which is double the size of Tide 64 but now "cheaper".  
 
 # C 
 
@@ -541,12 +541,12 @@ This suggests that Tide 128 cannabilizes Tide 64.
 
 b. Does Tide face a competitive threat from Wisk?
 
-A little bit. If Tide 128 price goes up and its demand decreases, demand for Tide 64 goes up slightly but demand for Wisk goes up more. However, if Tide 64 price increases and its demand decreases, Tide 128 goes up while Wisk demand decreases. There is competition for Tide 128, but not Tide 64. 
+A little bit. If Tide 128 price goes up and its demand decreases, price for Tide 64 goes up slightly but price for Wisk goes up more. However, if Tide 64 price increases and its demand decreases, Tide 128 goes up while Wisk price decreases but only slightly. There is competition for Tide 128, but not Tide 64. 
 
 
 c. How do you evaluate the current pricing tactics? Do you recommend changes? 
 
-If you decrease the price of Tide 128 and increase the price of Tide 64 their total profits will increase.
+According to our table in Q6, we suggest decreasing price 128 by 5% and increasing Tide 64 by 5%.
 
 
 
