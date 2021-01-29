@@ -401,12 +401,13 @@ Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
 
 ```{r}
 baseprice128 = mean(detergent_DF_2$p_tide128)
-
+baseprice128
 ```
 
 # B
 ```{r}
 baseprice64 = mean(detergent_DF_2$p_tide64)
+baseprice64
 ```
 
 # C / D
