@@ -368,17 +368,17 @@ Yes, the own and cross price elasticities decrease from Question 4's model to th
 # C 
 
 ```{r}
-lm128_E<-lm(log(q_tide128) ~ log(p_tide128)+log(p_tide64) + week + factor(store), data = detergent_DF_2)
-lm64_E<- lm(log(q_tide64) ~ log(p_tide128)+log(p_tide64) + week+ factor(store), data = detergent_DF_2)
+lm128_E<-lm(log(q_tide128) ~ log(p_tide128)+log(p_tide64) +log(p_wisk64) + week + factor(store), data = detergent_DF_2)
+lm64_E<- lm(log(q_tide64) ~ log(p_tide128)+log(p_tide64) +log(p_wisk64) + week+ factor(store), data = detergent_DF_2)
 
 lm128_Ea = tidy(lm128_E)
 lm64_Ea = tidy(lm64_E)
 
-kable(lm128_D[c(1:3),], digits = 4)
-kable(lm128_Ea[c(1:3),], digits = 4)
+kable(lm128_D[c(1:4),], digits = 4)
+kable(lm128_Ea[c(1:4),], digits = 4)
 
-kable(lm64_D[c(1:3),], digits = 4)
-kable(lm64_Ea[c(1:3),], digits = 4)
+kable(lm64_D[c(1:4),], digits = 4)
+kable(lm64_Ea[c(1:4),], digits = 4)
 
 ```
 
@@ -386,8 +386,7 @@ kable(lm64_Ea[c(1:3),], digits = 4)
 Discussion:
 How do the elasticity estimates and the time trend compare across these two regressions? Is the difference (or absence of a difference) as expected? 
 
-Not much of a difference here, using unit sales instead of velocity did not have much of an effect. This doesn't make sense conceptually, large stores and small stores should have variation between them. When we removed our velocity it barely changed the elasticities.
-
+They are surprisingly identical, using unit sales instead of velocity did not have any effect. This doesn't make sense conceptually, large stores and small stores should have variation between them. When we removed our velocity it did nothing to change the elasticities.
 
 
 ## Question 6
@@ -395,8 +394,8 @@ Not much of a difference here, using unit sales instead of velocity did not have
 r = 25%
 C = 0.25 / oz
 
-Q128 = A128 * P128^(-2.11) * P64^(0.211)
-Q64 = A64 * P128^(1.1627) * P64^(-1.585)
+Q128 = A128 * P128^(-2.3836) * P64^(0.2097) * PW64^(1.1648)
+Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
 
 # A
 
@@ -448,18 +447,19 @@ Scenario4: 5% decrease in price 128 and 5% increase in 64
 r = 25%
 C = 0.25 / oz
 
-Q128 = A128 * P128^(-2.11) * P64^(0.211)
-Q64 = A64 * P128^(1.1627) * P64^(-1.585)
+Q128 = A128 * P128^(-2.3836) * P64^(0.2097) * PW64^(1.1648)
+Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
 
 
 ```{r}
 pricechange = 0.05
 
 # Specify the function
-demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, basequantity) {
+demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, price_elasticity3, basequantity) {
    
    # New demand from method 1 
-   quantity_change_1 = ((1 + price_change1)^price_elasticity1) * ((1 + price_change2)^price_elasticity2)
+   quantity_change_1 = ((1 + price_change1)^price_elasticity1) * ((1 + price_change2)^price_elasticity2) *
+      ((1)^price_elasticity3)
     
    #Get new quantity from ratio of new / old 
    
@@ -473,17 +473,17 @@ demand_change <- function(price_change1, price_change2, price_elasticity1, price
 
 Running the Function
 ```{r}
-New_Q128_1 <- demand_change(0.05, 0.05, -2.11, 0.211, basevolume128)
-New_Q64_1 <- demand_change(0.05,0.05,1.16,-1.585, basevolume64)
+New_Q128_1 <- demand_change(0.05, 0.05, -2.11, 0.211,1.1648, basevolume128)
+New_Q64_1 <- demand_change(0.05,0.05,1.16,-1.585, -0.2809, basevolume64)
 
-New_Q128_2 <- demand_change(-0.05, -0.05, -2.11, 0.211, basevolume128)
-New_Q64_2 <- demand_change(-0.05,-0.05,1.16,-1.585, basevolume64)
+New_Q128_2 <- demand_change(-0.05, -0.05, -2.11, 0.211, 1.1648, basevolume128)
+New_Q64_2 <- demand_change(-0.05,-0.05,1.16,-1.585 , -0.2809, basevolume64)
 
-New_Q128_3 <- demand_change(0.05, 0.05, -2.11, 0.211, basevolume128)
-New_Q64_3 <- demand_change(-0.05,-0.05,1.16,-1.585, basevolume64)
+New_Q128_3 <- demand_change(0.05, 0.05, -2.11, 0.211, 1.1648, basevolume128)
+New_Q64_3 <- demand_change(-0.05,-0.05,1.16,-1.585 , -0.2809, basevolume64)
 
-New_Q128_4 <- demand_change(-0.05, -0.05, -2.11, 0.211, basevolume128)
-New_Q64_4 <- demand_change(0.05,0.05,1.16,-1.585, basevolume64)
+New_Q128_4 <- demand_change(-0.05, -0.05, -2.11, 0.211, 1.1648, basevolume128)
+New_Q64_4 <- demand_change(0.05,0.05,1.16,-1.585 , -0.2809, basevolume64)
 
 ```
 
