@@ -190,10 +190,10 @@ summary(lm64)
 lm128_coef<- summary(lm128)$coefficients
 lm64_coef<-summary(lm64)$coefficients#Lets graph these coefficients so we can see all these at a glance
 
-pe_graph<-c(lm64_coef[2:3,1],lm128_coef[2:3,1])
+pe_graph<-c(lm64_coef[2:4,1],lm128_coef[2:4,1])
 pe_graph
 
-barplot(pe_graph, main = "Price Elasticity", xlab = "Tide64's price elasticities              Tide128's price elasticities", col = rainbow(4), names.arg = c('Cross','Own', 'Own','Cross' ))
+barplot(pe_graph, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
 
 ```
 
