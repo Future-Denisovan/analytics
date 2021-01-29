@@ -1,17 +1,27 @@
 ---
+<<<<<<< Updated upstream
 title: "Assignment $"
 author: "Your name"
 date: "1/1/2021"
 output: word_document
+=======
+title: "Assignment-3"
+author: "Annie Beyer and Caleb Aguiar"
+date: "1/29/2021"
+output:
+  pdf_document: default
+  word_document: default
+>>>>>>> Stashed changes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Upload and Explore Data
+## Upload and Explore Data
 
 ```{r}
+setwd('E:\\MSBA_UW\\BUS_AN_514\\R_Code\\analytics')
 load(file = "Detergent.RData")
 dt <- detergent_DF
 library(skimr)
@@ -65,6 +75,21 @@ MarketShare <- data.frame(Product, Marketshare, MeanPrice, MedianPrice, Std.Dev)
 MarketShare            
 ```
 
+<<<<<<< Updated upstream
+=======
+
++---------------+---------------+-------------+--------------+-----------+
+| Product       | Marketshare   | Mean Price  | Median Price | Std. Dev |          
++===============+===============+=============+==============+===========+
+| Tide 128 oz   |      56.9%    |   8.36      |    8.48      |  .76      |
++---------------+---------------+-------------+--------------+-----------+
+| Tide 64 oz    |      26.3%    |   4.36      |    4.42      |  .40      |
++---------------+---------------+-------------+--------------+-----------+
+| Wisk 64 oz    |      16.8%    |   4.07      |    4.19      |  .49      |
++---------------+---------------+-------------+--------------+-----------+
+
+
+>>>>>>> Stashed changes
 # B
 Price Gap
 
@@ -397,10 +422,29 @@ del_price_64 = c(0.05, -0.05, -0.05, 0.05)
 q_128 = c(New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
 q_64 = c(New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 TotalProfits = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
+<<<<<<< Updated upstream
 
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64, TotalProfits)
 
 NewTable
+=======
+
+
+Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
+
+NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfits)
+
+NewTable
+ggplot(data = NewTable, aes(Price_Change,TotalProfits))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)+geom_label(
+    label="Revenue from Recommended change", 
+    x=3.15,
+    y=2800500000000,
+    label.padding = unit(0.55, "lines"), # Rectangle size around label
+    label.size = 0.35,
+    color = "black",
+    fill="grey")
+
+>>>>>>> Stashed changes
 ```
 
 
@@ -411,6 +455,7 @@ b. Does Tide face a competitive threat from Wisk?
 c. How do you evaluate the current pricing tactics? Do you recommend changes? 
 
 
+<<<<<<< Updated upstream
 
 
 
@@ -418,4 +463,8 @@ c. How do you evaluate the current pricing tactics? Do you recommend changes?
 
 
 
+=======
+c. How do you evaluate the current pricing tactics? Do you recommend changes? 
+>>>>>>> Stashed changes
 
+According to our table in Q6, we suggest decreasing price 128 by 5% and increasing Tide 64 by 5%.
