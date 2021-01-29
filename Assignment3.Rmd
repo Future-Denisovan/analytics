@@ -574,9 +574,9 @@ NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, To
 
 NewTable
 ggplot(data = NewTable, aes(Price_Change,TotalProfitsR))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)+geom_label(
-    label="Revenue from Recommended change", 
-    x=3.15,
-    y=2800500000000,
+    label="Profit from Recommended change", 
+    x=1.75,
+    y=2400500,
     label.padding = unit(0.55, "lines"), # Rectangle size around label
     label.size = 0.35,
     color = "black",
