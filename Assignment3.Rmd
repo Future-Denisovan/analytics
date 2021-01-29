@@ -533,15 +533,29 @@ New_Q64_4 <- demand_change(0.05,0.05,1.16,-1.585 , -0.2809, basevolume64)
 # G
 ```{r}
 #Total Profit calculations
-TotalProfit1 <- (New_Q128_1* (baseprice128*1.05))*(New_Q64_1* (baseprice64*1.05))
+#TotalProfit1 <- (New_Q128_1* (baseprice128*1.05))*(New_Q64_1* (baseprice64*1.05))
 
-TotalProfit2 <- (New_Q128_2*(baseprice128*0.95))*(New_Q64_2* (baseprice64*0.95))
+#TotalProfit2 <- (New_Q128_2*(baseprice128*0.95))*(New_Q64_2* (baseprice64*0.95))
 
-TotalProfit3 <- (New_Q128_3*(baseprice128*1.05))*(New_Q64_3*(baseprice64*0.95))
+#TotalProfit3 <- (New_Q128_3*(baseprice128*1.05))*(New_Q64_3*(baseprice64*0.95))
 
-TotalProfit4 <- (New_Q128_4*(baseprice128*0.95))*(New_Q64_4* (baseprice64*1.05))
+#TotalProfit4 <- (New_Q128_4*(baseprice128*0.95))*(New_Q64_4* (baseprice64*1.05))
 ```
 
+### CORRECT PROFIT?
+Profit Equation:
+pi128=Q_128*(P_128(1-r)-C)
+pi64 = Q_64*(P_64(1-r)-C)
+r = 25%
+C = 0.25 / oz
+
+```{r}
+Profit1 = (New_Q128_1 * ((baseprice128*1.05*0.75) - 0.25)) + (New_Q64_1 * ((baseprice64*1.05*0.75) - 0.25))
+Profit2 = (New_Q128_2 * ((baseprice128*0.95*0.75) - 0.25)) + (New_Q64_2 * ((baseprice64*0.95*0.75) - 0.25))
+Profit3 = (New_Q128_3 * ((baseprice128*1.05*0.75) - 0.25)) + (New_Q64_3 * ((baseprice64*0.95*0.75) - 0.25))
+Profit4 = (New_Q128_4 * ((baseprice128*0.95*0.75) - 0.25)) + (New_Q64_4 * ((baseprice64*0.95*0.75) - 0.25))
+
+```
 
 : Table of quantities sold and profits when Tide changes the price of Tide 64 and 128. Price changes are shown in percentages
 
@@ -551,15 +565,15 @@ del_price_128 = c(0.05, -0.05, 0.05, -0.05)
 del_price_64 = c(0.05, -0.05, -0.05, 0.05)
 q_128 = c(New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
 q_64 = c(New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
-TotalProfits = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
-
+#TotalProfitsW = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
+TotalProfitsR = c(Profit1, Profit2, Profit3, Profit4)
 
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
 
-NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfits)
+NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR)
 
 NewTable
-ggplot(data = NewTable, aes(Price_Change,TotalProfits))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)+geom_label(
+ggplot(data = NewTable, aes(Price_Change,TotalProfitsR))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)+geom_label(
     label="Revenue from Recommended change", 
     x=3.15,
     y=2800500000000,
@@ -588,8 +602,8 @@ A little bit. If Tide 128 price goes up and its demand decreases, price for Tide
 
 
 c. How do you evaluate the current pricing tactics? Do you recommend changes? 
-
-According to our table in Q6, we suggest decreasing price 128 by 5% and increasing Tide 64 by 5%.
+Base Profit: 2371489
+If you decrease both Tide product's prices by 5%, the expected profit is 2410586. This is therefore our recommendation, since it is > Base Profit.
 
 
 
