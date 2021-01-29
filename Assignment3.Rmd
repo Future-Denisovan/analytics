@@ -542,7 +542,7 @@ New_Q64_4 <- demand_change(0.05,0.05,1.16,-1.585 , -0.2809, basevolume64)
 #TotalProfit4 <- (New_Q128_4*(baseprice128*0.95))*(New_Q64_4* (baseprice64*1.05))
 ```
 
-### CORRECT PROFIT?
+### CORRECT PROFIT?????????????????
 Profit Equation:
 pi128=Q_128*(P_128(1-r)-C)
 pi64 = Q_64*(P_64(1-r)-C)
@@ -602,6 +602,7 @@ A little bit. If Tide 128 price goes up and its demand decreases, price for Tide
 
 
 c. How do you evaluate the current pricing tactics? Do you recommend changes? 
+
 Base Profit: 2371489
 If you decrease both Tide product's prices by 5%, the expected profit is 2410586. This is therefore our recommendation, since it is > Base Profit.
 
