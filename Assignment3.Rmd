@@ -149,13 +149,10 @@ This would suggest that the number of purchases made of each product is the same
 Tide 64 is more expensive than Wisk 64 on average.
 
 The variability between Tide 128 and Tide 64 is less than the variability between Tide 64 and Wisk 64. 
-#Isn't it more??
 
 Is there enough variation in the price gaps across stores and weeks to estimate the cross price elasticities between the two Tide pack sizes and Wisk 64?
 
-You're right, I don't understand this. What is the thresh hold?
-
-# Also, why does the homework not include Wisk in the regression models? In the slot management assignment, things were excluded if they didn't have enough variability...
+Yes, there is enough variation between each scenario. 
 
 ## Question 2
 
@@ -178,7 +175,7 @@ Discussion:
 What is the purpose of dividing unit sales by ACV to construct the dependent variable?
 
 
-The ACV is a measure of how large the store is. By dividing by ACV, this allows us to normalize the data so we can compare the two products equally. We would expect a larger store to be more sensitive to price changes, as customers are more interested in price at a large store, while customers at a small store are more likely to prioritize the convenience of the location. Additionally, not all stores may sell each product every single week (whether that is due to operational supply difficulties, a lack of data recording, etc...)
+The ACV is a measure of how large the store is. By dividing by ACV, this allows us to normalize the data so we can compare the two products equally. We would expect a larger store to be more sensitive to price changes, as customers are more interested in price at a large store and have more options to substitute with, while customers at a small store are more likely to prioritize the convenience of the location and have less of a selection. Additionally, not all stores may sell each product every single week (whether that is due to operational supply difficulties, a lack of data recording, etc...)
 
 
 # C
