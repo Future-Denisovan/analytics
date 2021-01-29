@@ -309,6 +309,17 @@ lm64_Ca<-tidy(lm64_C)
 kable(lm128_Ca[c(1:4),], digits = 4)
 kable(lm64_Ca[c(1:4),], digits = 4)
 
+
+
+lm128C_coef<- summary(lm128_C)$coefficients
+lm64C_coef<-summary(lm64_C)$coefficients#Lets graph these coefficients so we can see all these at a glance
+
+pe_graphC<-c(lm64C_coef[2:4,1],lm128C_coef[2:4,1])
+pe_graphC
+
+barplot(pe_graphC, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
+
+
 ```
 
 
@@ -347,6 +358,8 @@ Store Fixed Effect
 ```{r}
 lm128_D<-lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64) + week + factor(store), data = detergent_DF_2)
 lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ log(p_wisk64) + week+ factor(store), data = detergent_DF_2)
+lm128D_coef<- summary(lm128_D)$coefficients
+lm64D_coef<-summary(lm64_D)$coefficients#Lets graph these coefficients so we can see all these at a glance
 
 library(broom)
 library(knitr)
@@ -363,6 +376,14 @@ kable(lm64_Ca[c(1:4),], digits = 4)
 #Comparison
 kable(lm128_D[c(1:4),], digits = 4)
 kable(lm128_Ca[c(1:4),], digits = 4)
+
+
+
+
+pe_graphD<-c(lm64D_coef[2:4,1],lm128D_coef[2:4,1])
+pe_graphD
+
+barplot(pe_graphD, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
 
 
 
@@ -390,6 +411,16 @@ kable(lm128_Ea[c(1:4),], digits = 4)
 
 kable(lm64_D[c(1:4),], digits = 4)
 kable(lm64_Ea[c(1:4),], digits = 4)
+
+
+lm128E_coef<- summary(lm128_E)$coefficients
+lm64E_coef<-summary(lm64_E)$coefficients#Lets graph these coefficients so we can see all these at a glance
+
+pe_graphE<-c(lm64E_coef[2:4,1],lm128E_coef[2:4,1])
+pe_graphE
+
+barplot(pe_graphE, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
+
 
 ```
 
@@ -528,12 +559,14 @@ Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|")
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfits)
 
 NewTable
-plot(NewTable$Price_Change, NewTable$TotalProfits)
-ggplot(data = NewTable, aes(Price_Change,TotalProfits))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)
-
-
-
-
+ggplot(data = NewTable, aes(Price_Change,TotalProfits))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)+geom_label(
+    label="Revenue from Recommended change", 
+    x=3.15,
+    y=2800500000000,
+    label.padding = unit(0.55, "lines"), # Rectangle size around label
+    label.size = 0.35,
+    color = "black",
+    fill="grey")
 
 ```
 
@@ -547,8 +580,7 @@ Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
 
 Cross PE of 128 is 0.9028 which is > Cross PE of 64 at 0.2097.
 
-This suggests that Tide 128 cannabilizes Tide 64.
-
+This suggests that Tide 128 cannibalizes Tide 64.
 
 b. Does Tide face a competitive threat from Wisk?
 
