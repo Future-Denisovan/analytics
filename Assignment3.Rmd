@@ -235,6 +235,17 @@ summary(lm128_B)
 summary(lm64_B)
 
 
+lm128B_coef<- summary(lm128_B)$coefficients
+lm64B_coef<-summary(lm64_B)$coefficients#Lets graph these coefficients so we can see all these at a glance
+
+pe_graphB<-c(lm64B_coef[2:4,1],lm128B_coef[2:4,1])
+pe_graphB
+
+barplot(pe_graphB, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
+
+
+
+
 ```
 
 # B
