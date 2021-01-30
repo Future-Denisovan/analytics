@@ -271,27 +271,27 @@ See the table below for a comparison of the multiple R squared values. Once we i
 ```{r}
 library(tidytext)
 
-detergent_promos <- dt %>% 
-   select(week, promoflag) 
-   filter(promoflag == 1)
-
-totalweeks<-length(unique(dt$week))
-
-promoweeks <- length(unique(detergent_promos$week))
-
-store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
-
-store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
-
-sum(dt$promoflag)
-
-detergent_DF_2 = subset(detergent_DF, promoflag != 1)
+# detergent_promos <- dt %>% 
+#    select(week, promoflag) 
+#    filter(promoflag == 1)
+# 
+# totalweeks<-length(unique(dt$week))
+# 
+# promoweeks <- length(unique(detergent_promos$week))
+# 
+# store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
+# 
+# store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
+# 
+# sum(dt$promoflag)
+# 
+detergent_DF_2 = subset(dt, promoflag != 1)
 
 #In case I can't get the above to work
-# storeweeks <- count(dt)
-# promos <-sum(dt$promoflag)
-# PromoRatio <-promos/storeweeks
-# PromoRatio
+storeweeks <- count(dt)
+promos <-sum(dt$promoflag)
+PromoRatio <-promos/storeweeks
+PromoRatio
 
 ```
 
@@ -436,7 +436,7 @@ barplot(pe_graphE, main = "Price Elasticity", xlab = "Tide64's PE_______________
 Discussion:
 How do the elasticity estimates and the time trend compare across these two regressions? Is the difference (or absence of a difference) as expected? 
 
-They are surprisingly identical, using unit sales instead of velocity did not have any effect. This doesn't make sense conceptually, large stores and small stores should have variation between them. When we removed our velocity it did nothing to change the elasticities.
+They are surprisingly identical, using unit sales instead of velocity did not have any effect. This doesn't make sense conceptually, large stores and small stores should have variation between them. When we removed our velocity it did nothing to change the elasticities.The only difference is the latter models have a greater R2 value. 
 
 
 ## Question 6
@@ -524,17 +524,18 @@ demand_change <- function(price_change1, price_change2, price_elasticity1, price
 
 Running the Function
 ```{r}
-New_Q128_1 <- demand_change(0.05, 0.05, -2.11, 0.211,1.1648, basevolume128)
-New_Q64_1 <- demand_change(0.05,0.05,1.16,-1.585, -0.2809, basevolume64)
+New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 0.2097,1.1648, basevolume128)
+New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.09028, -0.2809, basevolume64)
 
-New_Q128_2 <- demand_change(-0.05, -0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_2 <- demand_change(-0.05,-0.05,1.16,-1.585 , -0.2809, basevolume64)
+New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
+New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.09028, -0.2809, basevolume64)
 
-New_Q128_3 <- demand_change(0.05, 0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_3 <- demand_change(-0.05,-0.05,1.16,-1.585 , -0.2809, basevolume64)
+New_Q128_3 <- demand_change(0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
+New_Q64_3 <- demand_change(0.05,-0.05,-1.4867,0.09028, -0.2809, basevolume64)
 
-New_Q128_4 <- demand_change(-0.05, -0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_4 <- demand_change(0.05,0.05,1.16,-1.585 , -0.2809, basevolume64)
+New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 0.2097,1.1648, basevolume128)
+New_Q64_4 <- demand_change(-0.05,0.05,-1.4867, 0.09028, -0.2809, basevolume64)
+New_Q64_1
 
 ```
 
