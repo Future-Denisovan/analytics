@@ -525,17 +525,17 @@ demand_change <- function(price_change1, price_change2, price_elasticity1, price
 Running the Function
 ```{r}
 New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.09028, -0.2809, basevolume64)
+New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
 
 New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.09028, -0.2809, basevolume64)
+New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.9028, -0.2809, basevolume64)
 
 New_Q128_3 <- demand_change(0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_3 <- demand_change(0.05,-0.05,-1.4867,0.09028, -0.2809, basevolume64)
+New_Q64_3 <- demand_change(-0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
 
 New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_4 <- demand_change(-0.05,0.05,-1.4867, 0.09028, -0.2809, basevolume64)
-New_Q64_1
+New_Q64_4 <- demand_change(0.05,-0.05,-1.4867, 0.9028, -0.2809, basevolume64)
+
 
 ```
 
@@ -550,7 +550,7 @@ C = 0.027 / oz
 Profit1 = (New_Q128_1 * ((baseprice128*1.05*0.75) - 0.027*128)) + (New_Q64_1 * ((baseprice64*1.05*0.75) - 0.027*64))
 Profit2 = (New_Q128_2 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_2 * ((baseprice64*0.95*0.75) - 0.027*64))
 Profit3 = (New_Q128_3 * ((baseprice128*1.05*0.75) - 0.027*128)) + (New_Q64_3 * ((baseprice64*0.95*0.75) - 0.027*64))
-Profit4 = (New_Q128_4 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_4 * ((baseprice64*0.95*0.75) - 0.027*64))
+Profit4 = (New_Q128_4 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_4 * ((baseprice64*1.05*0.75) - 0.027*64))
 
 ```
 
@@ -565,12 +565,30 @@ q_64 = c(basevolume64, New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 #TotalProfitsW = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
 TotalProfitsR = c(BaseTotalProfit, Profit1, Profit2, Profit3, Profit4)
 ChangeInPrice = c("Base Price", "Both +", "Both-", "T128 + T64 -", "T128 - T64 +")
-Color = c(1, 1, 2, 2,2)
+Color = c(1, 1, 2, 2,1)
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
 
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR, ChangeInPrice, Color)
 
 NewTable
+
+```
+
+Final Table:
++---------------+---------------+-------------+--------------+---------------+
+| del_price_128 | del_price_64  | q_128       | q_64         | Total profits |          
++===============+===============+=============+==============+===============+
+| 0.05          | 0.05          | 222204      |  275007      |  1192575      |
++---------------+---------------+-------------+--------------+---------------+
+| -0.05         | -0.05         | 276212      |  291557      |  1123340      |
++---------------+---------------+-------------+--------------+---------------+
+| 0.05          | -0.05         | 217590      | 319127       |  1149044      |
++---------------+---------------+-------------+--------------+---------------+
+| -0.05         | 0.05          | 282070      | 251248       |  1164671      |
++---------------+---------------+-------------+--------------+---------------+
+
+Data Visualization of New Profits verses Old
+```{r}
 # ggplot(data = NewTable, aes(ChangeInPrice,TotalProfitsR, color = ChangeInPrice)) + 
 #    geom_point(size=10,show.legend = NA) + 
 #    theme_classic() +
@@ -616,42 +634,9 @@ c. How do you evaluate the current pricing tactics? Do you recommend changes?
 
 Base Profit: 1161182
 
-It seems that increasing both prices by 5% genereates the highest profit of 1,205,947, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
+It seems that increasing both prices by 5% genereates the highest profit of 1,192,575, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
 
 
-Double Checking changing only one Tide product price doesn't have a better profit:
-
-```{r}
-New_Q128_5 <- demand_change(0.05, 0, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_5 <- demand_change(0.05, 0 ,1.16,-1.585 , -0.2809, basevolume64)
-
-New_Q128_6 <- demand_change(0, 0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_6 <- demand_change(0, 0.05 ,1.16,-1.585 , -0.2809, basevolume64)
-
-New_Q128_7 <- demand_change(-0.05, 0, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_7 <- demand_change(-0.05, 0 ,1.16,-1.585 , -0.2809, basevolume64)
-
-New_Q128_8 <- demand_change(0, -0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_8 <- demand_change(0, -0.05 ,1.16,-1.585 , -0.2809, basevolume64)
-
-#Increase price 128 by 5% but keep 64 the same
-Profit5 = (New_Q128_5 * ((baseprice128*1.05*0.75) - 0.027*128)) + (New_Q64_5 * ((baseprice64*1.0*0.75) - 0.027*64))
-
-#Keep price 128 the same but increase price 64 by 5%
-Profit6 = (New_Q128_6 * ((baseprice128*1.0*0.75) - 0.027*128)) + (New_Q64_6 * ((baseprice64*1.05*0.75) - 0.027*64))
-
-#Decrease price 128 by 5% but keep 64 the same
-Profit7 = (New_Q128_7 * ((baseprice128*.95*0.75) - 0.027*128)) + (New_Q64_7 * ((baseprice64*1.0*0.75) - 0.027*64))
-
-#Keep price 128 the same but decrease price 64 by 5%
-Profit8 = (New_Q128_8 * ((baseprice128*1.0*0.75) - 0.027*128)) + (New_Q64_8 * ((baseprice64*0.95*0.75) - 0.027*64))
-
-NewProfits <- c(Profit5, Profit6, Profit7, Profit8)
-
-NewTable2 <- data.frame(TotalProfitsR, NewProfits)
-
-NewTable2
-```
 
  
 
