@@ -270,22 +270,24 @@ See the table below for a comparison of the multiple R squared values. Once we i
 
 ```{r}
 library(tidytext)
-library(dplyr)
 
-detergent_promos <- dt %>% select(week, promoflag)
-
-detergent_promos<- detergent_promos %>% filter(promoflag == 1)
-
-totalweeks<-length(unique(dt$week))
-
-promoweeks <- length(unique(detergent_promos$week))
-
-store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
-
-store_week_fraction 
- 
+# detergent_promos <- dt %>% 
+#    select(week, promoflag) 
+#    filter(promoflag == 1)
+# 
+# totalweeks<-length(unique(dt$week))
+# 
+# promoweeks <- length(unique(detergent_promos$week))
+# 
+# store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
+# 
+# store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
+# 
+# sum(dt$promoflag)
+# 
 detergent_DF_2 = subset(dt, promoflag != 1)
 
+#In case I can't get the above to work
 storeweeks <- count(dt)
 promos <-sum(dt$promoflag)
 PromoRatio <-promos/storeweeks
