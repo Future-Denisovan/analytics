@@ -269,30 +269,21 @@ See the table below for a comparison of the multiple R squared values. Once we i
 # A
 
 ```{r}
-library(tidytext)
+library(dplyr)
+detergent_promos <- dt %>% select(week, promoflag) %>% 
+  filter(promoflag == 1)
 
-# detergent_promos <- dt %>% 
-#    select(week, promoflag) 
-#    filter(promoflag == 1)
-# 
-# totalweeks<-length(unique(dt$week))
-# 
-# promoweeks <- length(unique(detergent_promos$week))
-# 
-# store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
-# 
-# store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
-# 
-# sum(dt$promoflag)
-# 
-detergent_DF_2 = subset(dt, promoflag != 1)
+totalweeks<-length(unique(dt$week))
 
-#In case I can't get the above to work
-storeweeks <- count(dt)
-promos <-sum(dt$promoflag)
-PromoRatio <-promos/storeweeks
-PromoRatio
+promoweeks<-length(unique(detergent_promos$week))
 
+store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
+
+store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
+
+sum(dt$promoflag)
+
+detergent_DF_2 = subset(detergent_DF, promoflag != 1)
 ```
 
 
@@ -565,17 +556,8 @@ q_64 = c(basevolume64, New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 #TotalProfitsW = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
 TotalProfitsR = c(BaseTotalProfit, Profit1, Profit2, Profit3, Profit4)
 ChangeInPrice = c("Base Price", "Both +", "Both-", "T128 + T64 -", "T128 - T64 +")
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 Color = c(1, 1, 2, 2,2)
-=======
-=======
->>>>>>> parent of 204c9c2... Changed x axis title for final graph
-=======
->>>>>>> parent of 204c9c2... Changed x axis title for final graph
 Color = c(1, 1, 2, 2,1)
->>>>>>> parent of 204c9c2... Changed x axis title for final graph
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
 
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR, ChangeInPrice, Color)
@@ -658,9 +640,7 @@ Profit8 = (New_Q128_8 * ((baseprice128*1.0*0.75) - 0.027*128)) + (New_Q64_8 * ((
 
 NewProfits <- c(Profit5, Profit6, Profit7, Profit8)
 
-NewTable2 <- data.frame(TotalProfitsR, NewProfits)
-
-NewTable2
+NewProfits
 ```
 
  
