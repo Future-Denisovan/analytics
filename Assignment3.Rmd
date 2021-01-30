@@ -561,27 +561,41 @@ Profit4 = (New_Q128_4 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_4 * (
 
 ```{r}
 library(scales)
-del_price_128 = c(0.05, -0.05, 0.05, -0.05)
-del_price_64 = c(0.05, -0.05, -0.05, 0.05)
-q_128 = c(New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
-q_64 = c(New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
+del_price_128 = c(0, 0.05, -0.05, 0.05, -0.05)
+del_price_64 = c(0, 0.05, -0.05, -0.05, 0.05)
+q_128 = c(basevolume128, New_Q128_1, New_Q128_2, New_Q128_3, New_Q128_4)
+q_64 = c(basevolume64, New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 #TotalProfitsW = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
-TotalProfitsR = c(Profit1, Profit2, Profit3, Profit4)
-
+TotalProfitsR = c(BaseTotalProfit, Profit1, Profit2, Profit3, Profit4)
+ChangeInPrice = c("Base Price", "Both +", "Both-", "T128 + T64 -", "T128 - T64 +")
+Color = c(1, 1, 2, 2,2)
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
 
-NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR)
+NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR, ChangeInPrice, Color)
 
 NewTable
-ggplot(data = NewTable, aes(Price_Change,TotalProfitsR))+geom_point(size=10,show.legend = NA)+scale_y_continuous(labels = comma)+geom_label(
-    label="Profit from Recommended change", 
-    x=1.75,
-    y=2400500,
-    label.padding = unit(0.55, "lines"), # Rectangle size around label
-    label.size = 0.35,
-    color = "black",
-    fill="grey")
+# ggplot(data = NewTable, aes(ChangeInPrice,TotalProfitsR, color = ChangeInPrice)) + 
+#    geom_point(size=10,show.legend = NA) + 
+#    theme_classic() +
+#    scale_y_continuous(labels = comma) + 
+#    geom_label(
+#     label="Profit from Recommended change", 
+#     x=1.75,
+#     y=2400500, 
+#     label.padding = unit(0.55, "lines"), # Rectangle size around label
+#     label.size = 0.35,
+#     color = "black")
 
+plot2 <- 
+   ggplot(data = NewTable, aes(reorder(ChangeInPrice,TotalProfitsR), TotalProfitsR, fill = Color)) + 
+   geom_col() + 
+   theme_classic() +
+   theme(legend.position = "none") +
+   xlab("Change in Price") +
+   ylab("Total Profit $") +
+   ggtitle("Which One is Higher Than the Base Profit?")
+
+plot2
 ```
 
 
@@ -602,6 +616,13 @@ A little bit. If Tide 128 price goes up and its demand decreases, price for Tide
 
 
 c. How do you evaluate the current pricing tactics? Do you recommend changes? 
+
+Base Profit: 1161182
+
+It seems that increasing both prices by 5% genereates the highest profit of 1,205,947, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
+
+
+Double Checking changing only one Tide product price doesn't have a better profit:
 
 ```{r}
 New_Q128_5 <- demand_change(0.05, 0, -2.11, 0.211, 1.1648, basevolume128)
@@ -635,9 +656,7 @@ NewTable2 <- data.frame(TotalProfitsR, NewProfits)
 NewTable2
 ```
 
-Base Profit: 1161182
-
-It seems that increasing both prices by 5% genereates the highest profit of 1,205,947, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%. 
+ 
 
 
 
