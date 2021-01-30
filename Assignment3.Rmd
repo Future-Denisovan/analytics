@@ -565,7 +565,11 @@ q_64 = c(basevolume64, New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 #TotalProfitsW = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
 TotalProfitsR = c(BaseTotalProfit, Profit1, Profit2, Profit3, Profit4)
 ChangeInPrice = c("Base Price", "Both +", "Both-", "T128 + T64 -", "T128 - T64 +")
+<<<<<<< HEAD
 Color = c(1, 1, 2, 2,2)
+=======
+Color = c(1, 1, 2, 2,1)
+>>>>>>> parent of 204c9c2... Changed x axis title for final graph
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
 
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR, ChangeInPrice, Color)
