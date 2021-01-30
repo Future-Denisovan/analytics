@@ -254,7 +254,7 @@ Explain why adding a time trend is important here. Discuss whether the demand es
 
 The demand estimates have changed, but only slightly. Not enough to now make sense.
 
-Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a more accurate model.
+Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a more accurate model. For Tide64, an important change is that the Wisk price elasticity changed from negative to positive. 
 
 See the table below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture between roughly 8-10% more of the variation.
 
@@ -269,13 +269,15 @@ See the table below for a comparison of the multiple R squared values. Once we i
 # A
 
 ```{r}
-library(dplyr)
-detergent_promos <- dt %>% select(week, promoflag) %>% 
-  filter(promoflag == 1)
+library(tidytext)
+
+detergent_promos <- dt %>% 
+   select(week, promoflag) 
+   filter(promoflag == 1)
 
 totalweeks<-length(unique(dt$week))
 
-promoweeks<-length(unique(detergent_promos$week))
+promoweeks <- length(unique(detergent_promos$week))
 
 store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
 
@@ -284,6 +286,12 @@ store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
 sum(dt$promoflag)
 
 detergent_DF_2 = subset(detergent_DF, promoflag != 1)
+
+#In case I can't get the above to work
+# storeweeks <- count(dt)
+# promos <-sum(dt$promoflag)
+# PromoRatio <-promos/storeweeks
+# PromoRatio
 
 ```
 
