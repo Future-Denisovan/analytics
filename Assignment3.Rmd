@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-## Upload and Explore Data
+##Upload and Explore Data
 
 ```{r}
 load(file = "Detergent.RData")
@@ -174,7 +174,9 @@ SalesVelocity64
 Discussion:
 What is the purpose of dividing unit sales by ACV to construct the dependent variable?
 
+
 The ACV is a measure of how large the store is. By dividing by ACV, this allows us to normalize the data so we can compare the prices of two products equally. We would expect a larger store to be more sensitive to price changes, as customers are more interested in price at a large store and have more options to substitute with, while customers at a small store are more likely to prioritize the convenience of the location and have less of a selection. Additionally, not all stores may sell each product every single week (whether that is due to operational supply difficulties, a lack of data recording, etc...)
+
 
 # C
 Log linear demand model 
@@ -208,7 +210,7 @@ CrossPE_64 = 1.28 Elastic
 Cross_PE_128 & Wisk = 0.15 Inelastic, positive
 Cross_PE_64 & Wisk = -0.87 Inelastic, negative
 
-This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. This suggests that as Tide's own price increases, it's demand goes down by a lot and Tide 64's prices increases a little as well as the price for Wisk, but not as much. However, when Tide 64's  demand increases, its own price decreases, and Tide128 prices increase but only slightly. However, Wisk's price decreases.
+This regression shows that Tide128 and Tide64 are highly elastic, and there cross price elasticities are also elastic, but not as much. This suggests that as Tides own price increases, it's demand goes down by a lot and Tide 64's prices increases a little as well as the price for Wisk, but not as much. However, when Tide 64's  demand increases, its own price decreases, and Tide128 prices increase but only slightly. However, Wisk's price decreases.
 
 This does not make a lot of sense, because their price gap is sometimes at zero, and if that is the case customers are going to be falling over themselves to buy the Tide128 and not bother with Tide64. We need to examine if there is something going on here, is there more affluent locations where Tide64 is selling the same as Tide128 at a lower income area, or is there a seasonal element where people buy more Tide when they wash more clothes from sweating.
 
@@ -232,6 +234,7 @@ kable(lm64_Ba[c(1:4),], digits = 4)
 summary(lm128_B)
 summary(lm64_B)
 
+
 lm128B_coef<- summary(lm128_B)$coefficients
 lm64B_coef<-summary(lm64_B)$coefficients#Lets graph these coefficients so we can see all these at a glance
 
@@ -239,6 +242,9 @@ pe_graphB<-c(lm64B_coef[2:4,1],lm128B_coef[2:4,1])
 pe_graphB
 
 barplot(pe_graphB, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
+
+
+
 
 ```
 
@@ -248,7 +254,7 @@ Explain why adding a time trend is important here. Discuss whether the demand es
 
 The demand estimates have changed, but only slightly. Not enough to now make sense.
 
-Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a more accurate model. For Tide64, an important change is that the Wisk price elasticity changed from negative to positive. 
+Time trend is extremely important, once we accounted for seasonal trends, it improves the previous model immensely. This makes sense, since the purchase of detergent is likely to be driven by weather(depends on the location, but think about people spending alot of time outside vs inside would change the rate at which the product is used). It is important not to try to build too many assumptions into this. Tide128 is a product that may take a few weeks to consume, and so if there is a seasonal effect driving its consumption there will be a lag effect. The big takeaway is that incorporating the week that the detergent was purchased into our model we get a more accurate model. For Tide64, an important change is that the Wisk price elasticity changed from negative to positive. 
 
 See the table below for a comparison of the multiple R squared values. Once we implemented dummy variables for time, our model was able to capture between roughly 8-10% more of the variation.
 
@@ -273,7 +279,9 @@ promoweeks<-length(unique(detergent_promos$week))
 
 store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
 
-store_week_fraction
+store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
+
+sum(dt$promoflag)
 
 detergent_DF_2 = subset(detergent_DF, promoflag != 1)
 ```
@@ -338,6 +346,8 @@ Cross_PE_64 & Wisk = -0.5189
 
 The own price effects have decreased significantly, and also the gap between the two have increased as well. Now, Tide 128 is highly elastic while Tide 64 is mildly elastic. Additionally, as Tide 128 demand increases, prices for Tide 64 decreases and price for Wisk 64 increases. As Tide 64 demand increase, prices for Tide 128 increases and prices for Wisk decreases.It is still interesting that if demand increases for either Tide product, the prices for the opposite Tide product and for the Wisk product are not sharing the same sign (go in opposite directions).
 
+## BEST GUESS?
+
 ## Question 5
 
 Store Fixed Effect
@@ -350,8 +360,13 @@ lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ log(p_wisk64) + we
 lm128D_coef<- summary(lm128_D)$coefficients
 lm64D_coef<-summary(lm64_D)$coefficients#Lets graph these coefficients so we can see all these at a glance
 
+library(broom)
+library(knitr)
+
 lm128_D <- tidy(lm128_D)
 lm64_D <- tidy(lm64_D)
+
+
 
 kable(lm64_D[c(1:4),], digits = 4)
 #Comparison
@@ -361,10 +376,16 @@ kable(lm64_Ca[c(1:4),], digits = 4)
 kable(lm128_D[c(1:4),], digits = 4)
 kable(lm128_Ca[c(1:4),], digits = 4)
 
+
+
+
 pe_graphD<-c(lm64D_coef[2:4,1],lm128D_coef[2:4,1])
 pe_graphD
 
 barplot(pe_graphD, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
+
+
+
 
 ```
 
@@ -373,7 +394,7 @@ Discussion:
 Do the estimates of own and cross price elasticties reveal an improvement over the model specification
 in question 4? 
 
-Yes, the own and cross price elasticities decrease from Question 4's model to this model for Tide 64. For Tide 128, it's own price elasticity decreases and more notably, the cross price elasticity for tide 64 changes sign from negative to positive, which finally makes more sense. This means that as the demand for Tide 128 increase, the price for Tide 64 increases only slightly and for Wisk 64 increases more significantly while the price for Tide 128 decreases. As the demand increases for Tide 64, the price for Tide 128 increases slightly while prices decrease slightly for Wisk 64 and decreases more for Tide 64. This makes more sense because if there are price changes for a 64 size product, people might feel like they're getting a better deal for Tide 128 which is double the size of Tide 64 but now "cheaper".  
+Yes, the own and cross price elasticities decrease from Question 4's model to this model for Tide 64. For Tide 128, it's own price elasticity decreases and more noteably, the cross price elasticity for tide 64 changes sign from negative to positive, which finally makes more sense. This means that as the demand for Tide 128 increase, the price for Tide 64 increases only slightly and for Wisk 64 increases more significantly while the price for Tide 128 decreases. As the demand increases for Tide 64, the price for Tide 128 increases slightly while prices decrease slightly for Wisk 64 and decreases more for Tide 64. This makes more sense beceause if there are price changes for a 64 size product, people might feel like they're getting a better deal for Tide 128 which is double the size of Tide 64 but now "cheaper".  
 
 # C 
 
@@ -456,6 +477,7 @@ BaseTotalProfit <- Bprofit128 + Bprofit64
 BaseTotalProfit
 
 ```
+
 
 # F
 
