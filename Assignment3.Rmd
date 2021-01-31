@@ -490,17 +490,6 @@ Final Table:
 
 Data Visualization of New Profits verses Old
 ```{r}
-# ggplot(data = NewTable, aes(ChangeInPrice,TotalProfitsR, color = ChangeInPrice)) + 
-#    geom_point(size=10,show.legend = NA) + 
-#    theme_classic() +
-#    scale_y_continuous(labels = comma) + 
-#    geom_label(
-#     label="Profit from Recommended change", 
-#     x=1.75,
-#     y=2400500, 
-#     label.padding = unit(0.55, "lines"), # Rectangle size around label
-#     label.size = 0.35,
-#     color = "black")
 plot2 <- 
    ggplot(data = NewTable, aes(reorder(ChangeInPrice,TotalProfitsR), TotalProfitsR, fill = Color)) + 
    geom_col() + 
