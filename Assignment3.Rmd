@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 #install.packages('devtools')#Packages required
 #devtools::install_github("ropensci/skimr")
 #install.packages('arm')#to plot coefficients 
-
 ```
 
 ##Upload and Explore Data
@@ -36,43 +35,33 @@ head(dt)
 
 ```{r}
 #Make Revenue column for each product
-
 dt$T128Revenue <- dt$q_tide128 * dt$p_tide128
 dt$T64Revenue <- dt$q_tide64 * dt$p_tide64
 dt$WiskRevenue <- dt$q_wisk64 * dt$p_wisk64
-
 TotalRevenue <- sum(dt$T128Revenue) + sum(dt$T64Revenue) + sum(dt$WiskRevenue)
-
 T128Rev <- (sum(dt$T128Revenue) / TotalRevenue) * 100
 T64Rev <- (sum(dt$T64Revenue) / TotalRevenue) * 100
 WiskRev <- (sum(dt$WiskRevenue) / TotalRevenue) * 100
-
 TotalRevenue1 <- format(round(TotalRevenue, 2), nsmall = 2)
 T128Rev1 <- format(round(T128Rev, 2), nsmall = 2)
 T64Rev1 <- format(round(T64Rev, 2), nsmall = 2)
 WiskRev1 <- format(round(WiskRev, 2), nsmall = 2)
-
 Mean128 <- mean(dt$p_tide128)
 Mean64 <- mean(dt$p_tide64)
 MeanW <- mean(dt$p_wisk64)
-
 SD128 <- sd(dt$p_tide128)
 SD64 <- sd(dt$p_tide64)
 SDW <- sd(dt$p_wisk64)
-
 Med128 <- median(dt$p_tide128)
 Medn64 <- median(dt$p_tide64)
 MednW <- median(dt$p_wisk64)
-
 library(data.table)
 Marketshare = c(T128Rev1, T64Rev1, WiskRev1)
 MeanPrice = c(Mean128, Mean64, MeanW)
 MedianPrice = c(Med128, Medn64, MednW)
 Std.Dev = c(SD128, SD64, SDW)
 Product <- c("Tide 128 oz", "Tide 64 oz", "Wisk 64 oz")
-
 MarketShare <- data.frame(Product, Marketshare, MeanPrice, MedianPrice, Std.Dev)
-
 describe(dt)
                           
 MarketShare            
@@ -95,23 +84,17 @@ Price Gap
 ```{r}
 dt$PriceGap1 <- dt$p_tide128 - dt$p_tide64
 dt$PriceGap2 <- dt$p_tide64 - dt$p_wisk64
-
 MeanPG1 <- mean(dt$PriceGap1)
 MeanPG2 <- mean(dt$PriceGap2)
-
 SDPG1 <- sd(dt$PriceGap1)
 SDPG2 <- sd(dt$PriceGap2)
-
 MedPG1 <- median(dt$PriceGap1)
 MedPG2 <- median(dt$PriceGap2)
-
 MeanPriceGap = c(MeanPG1, MeanPG2)
 MedianPriceGap = c(MedPG1, MedPG2)
 Std.DevPriceGap = c(SDPG1, SDPG2)                  
 PriceGap <- c("Tide128- Tide64", "Tide64 - Wisk64") 
-
 PriceGap <- data.frame(PriceGap, MeanPriceGap, MedianPriceGap, Std.DevPriceGap)
-
 PriceGap 
 ```
 
@@ -128,12 +111,10 @@ PriceGap
 Histograms
 ```{r}
 par(mfrow=c(1,2))#Set the plotting area into a 1*2 array
-
 #Set axis to the same for better comparison
 hist(dt$PriceGap1, freq = F, col = "steelblue", breaks = 50, xlab = "Price Gap 1 ($)", main = "Price Gap of Tide 128 - Tide 64",
      xlim = c(-3,8))
 hist(dt$PriceGap2, freq = F, col = "orange", breaks = 50, xlab = "Price Gap 2 ($)", main = "Price Gap of Tide 64 - Wisk 64",xlim = c(-3,8))
-
 par(mfrow=c(1,1))
 ```
 
@@ -162,10 +143,8 @@ Sales velocity for Tide 128 and Tide 64
 ```{r}
 dt$svelocity128 <- (dt$q_tide128/dt$acv)
 dt$svelocity64 <- (dt$q_tide64/dt$acv)
-
 SalesVelocity128 <- sum(dt$svelocity128)
 SalesVelocity64 <- sum(dt$svelocity64)
-
 SalesVelocity128
 SalesVelocity64
 ```
@@ -183,18 +162,13 @@ Log linear demand model
 ```{r}
 lm128 = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64), data = dt)
 lm64 = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64), data = dt)
-
 summary(lm128)
 summary(lm64)
-
 lm128_coef<- summary(lm128)$coefficients
 lm64_coef<-summary(lm64)$coefficients#Lets graph these coefficients so we can see all these at a glance
-
 pe_graph<-c(lm64_coef[2:4,1],lm128_coef[2:4,1])
 pe_graph
-
 barplot(pe_graph, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
-
 ```
 
 
@@ -224,28 +198,17 @@ Time Trend
 dt$week<-as.integer(dt$week)
 lm128_B <- lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64) +  week, data = dt)
 lm64_B <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64) + week, data = dt)
-
 lm128_Ba<-tidy(lm128_B) 
 lm64_Ba<-tidy(lm64_B)
-
 kable(lm128_Ba[c(1:4),], digits = 4)
 kable(lm64_Ba[c(1:4),], digits = 4)
-
 summary(lm128_B)
 summary(lm64_B)
-
-
 lm128B_coef<- summary(lm128_B)$coefficients
 lm64B_coef<-summary(lm64_B)$coefficients#Lets graph these coefficients so we can see all these at a glance
-
 pe_graphB<-c(lm64B_coef[2:4,1],lm128B_coef[2:4,1])
 pe_graphB
-
 barplot(pe_graphB, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
-
-
-
-
 ```
 
 # B
@@ -270,29 +233,19 @@ See the table below for a comparison of the multiple R squared values. Once we i
 
 ```{r}
 library(tidytext)
-
-# detergent_promos <- dt %>% 
-#    select(week, promoflag) 
-#    filter(promoflag == 1)
-# 
-# totalweeks<-length(unique(dt$week))
-# 
-# promoweeks <- length(unique(detergent_promos$week))
-# 
-# store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
-# 
-# store_week_fraction #Did we lose some data, there isn't the expected 300 weeks.
-# 
-# sum(dt$promoflag)
-# 
+library(dplyr)
+detergent_promos <- dt %>% select(week, promoflag)
+detergent_promos<- detergent_promos %>% filter(promoflag == 1)
+totalweeks<-length(unique(dt$week))
+promoweeks <- length(unique(detergent_promos$week))
+store_week_fraction <- paste(promoweeks,totalweeks, sep = '/')
+store_week_fraction 
+ 
 detergent_DF_2 = subset(dt, promoflag != 1)
-
-#In case I can't get the above to work
 storeweeks <- count(dt)
 promos <-sum(dt$promoflag)
 PromoRatio <-promos/storeweeks
 PromoRatio
-
 ```
 
 
@@ -301,33 +254,21 @@ PromoRatio
 ```{r}
 detergent_DF_2$svelocity128 <- (detergent_DF_2$q_tide128/detergent_DF_2$acv)
 detergent_DF_2$svelocity64 <- (detergent_DF_2$q_tide64/detergent_DF_2$acv)
-
 SalesVelocity128_B <- sum(detergent_DF_2$svelocity128)
 SalesVelocity64_B <- sum(detergent_DF_2$svelocity64)
-
 lm128_C = lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64) +  week, data = detergent_DF_2)
 lm64_C = lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64) + week, data = detergent_DF_2)
-
 summary(lm128_C)
 summary(lm64_C)
-
 lm128_Ca<-tidy(lm128_C)
 lm64_Ca<-tidy(lm64_C)
-
 kable(lm128_Ca[c(1:4),], digits = 4)
 kable(lm64_Ca[c(1:4),], digits = 4)
-
-
-
 lm128C_coef<- summary(lm128_C)$coefficients
 lm64C_coef<-summary(lm64_C)$coefficients#Lets graph these coefficients so we can see all these at a glance
-
 pe_graphC<-c(lm64C_coef[2:4,1],lm128C_coef[2:4,1])
 pe_graphC
-
 barplot(pe_graphC, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
-
-
 ```
 
 
@@ -368,34 +309,19 @@ lm128_D<-lm(log(svelocity128) ~ log(p_tide128)+log(p_tide64) + log(p_wisk64) + w
 lm64_D <- lm(log(svelocity64) ~ log(p_tide128)+log(p_tide64)+ log(p_wisk64) + week+ factor(store), data = detergent_DF_2)
 lm128D_coef<- summary(lm128_D)$coefficients
 lm64D_coef<-summary(lm64_D)$coefficients#Lets graph these coefficients so we can see all these at a glance
-
 library(broom)
 library(knitr)
-
 lm128_D <- tidy(lm128_D)
 lm64_D <- tidy(lm64_D)
-
-
-
 kable(lm64_D[c(1:4),], digits = 4)
 #Comparison
 kable(lm64_Ca[c(1:4),], digits = 4)
-
 #Comparison
 kable(lm128_D[c(1:4),], digits = 4)
 kable(lm128_Ca[c(1:4),], digits = 4)
-
-
-
-
 pe_graphD<-c(lm64D_coef[2:4,1],lm128D_coef[2:4,1])
 pe_graphD
-
 barplot(pe_graphD, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
-
-
-
-
 ```
 
 # B
@@ -410,26 +336,17 @@ Yes, the own and cross price elasticities decrease from Question 4's model to th
 ```{r}
 lm128_E<-lm(log(q_tide128) ~ log(p_tide128)+log(p_tide64) +log(p_wisk64) + week + factor(store), data = detergent_DF_2)
 lm64_E<- lm(log(q_tide64) ~ log(p_tide128)+log(p_tide64) +log(p_wisk64) + week+ factor(store), data = detergent_DF_2)
-
 lm128_Ea = tidy(lm128_E)
 lm64_Ea = tidy(lm64_E)
-
 kable(lm128_D[c(1:4),], digits = 4)
 kable(lm128_Ea[c(1:4),], digits = 4)
-
 kable(lm64_D[c(1:4),], digits = 4)
 kable(lm64_Ea[c(1:4),], digits = 4)
-
-
 lm128E_coef<- summary(lm128_E)$coefficients
 lm64E_coef<-summary(lm64_E)$coefficients#Lets graph these coefficients so we can see all these at a glance
-
 pe_graphE<-c(lm64E_coef[2:4,1],lm128E_coef[2:4,1])
 pe_graphE
-
 barplot(pe_graphE, main = "Price Elasticity", xlab = "Tide64's PE_______________________Tide128's PE", col = rainbow(6), names.arg = c('Cross Tide','Own', 'Cross Wisk','Own', 'Cross Tide', 'Cross Wisk' ))
-
-
 ```
 
 
@@ -464,13 +381,10 @@ baseprice64
 
 ```{r}
 stores <- length(unique(detergent_DF_2$store))
-
 basevolume128 = stores * 52 * mean(detergent_DF_2$q_tide128)
 basevolume64 = stores * 52 * mean(detergent_DF_2$q_tide64)
-
 basevolume128
 basevolume64
-
 ```
 
 # E
@@ -481,10 +395,8 @@ pi128=Q_128*(P_128(1-r)-C)
 ```{r}
 Bprofit128 = basevolume128 * ((baseprice128*0.75) - 0.027*128)
 Bprofit64 = basevolume64 * ((baseprice64*0.75) - 0.027*64)
-
 BaseTotalProfit <- Bprofit128 + Bprofit64
 BaseTotalProfit
-
 ```
 
 
@@ -504,7 +416,6 @@ Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
 
 ```{r}
 pricechange = 0.05
-
 # Specify the function
 demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, price_elasticity3, basequantity) {
    
@@ -519,24 +430,18 @@ demand_change <- function(price_change1, price_change2, price_elasticity1, price
    # Return results as a list
    return(NewQuantity)
 }
-
 ```
 
 Running the Function
 ```{r}
 New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.09028, -0.2809, basevolume64)
-
+New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
 New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.09028, -0.2809, basevolume64)
-
+New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.9028, -0.2809, basevolume64)
 New_Q128_3 <- demand_change(0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_3 <- demand_change(0.05,-0.05,-1.4867,0.09028, -0.2809, basevolume64)
-
+New_Q64_3 <- demand_change(-0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
 New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_4 <- demand_change(-0.05,0.05,-1.4867, 0.09028, -0.2809, basevolume64)
-New_Q64_1
-
+New_Q64_4 <- demand_change(0.05,-0.05,-1.4867, 0.9028, -0.2809, basevolume64)
 ```
 
 # G
@@ -550,8 +455,7 @@ C = 0.027 / oz
 Profit1 = (New_Q128_1 * ((baseprice128*1.05*0.75) - 0.027*128)) + (New_Q64_1 * ((baseprice64*1.05*0.75) - 0.027*64))
 Profit2 = (New_Q128_2 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_2 * ((baseprice64*0.95*0.75) - 0.027*64))
 Profit3 = (New_Q128_3 * ((baseprice128*1.05*0.75) - 0.027*128)) + (New_Q64_3 * ((baseprice64*0.95*0.75) - 0.027*64))
-Profit4 = (New_Q128_4 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_4 * ((baseprice64*0.95*0.75) - 0.027*64))
-
+Profit4 = (New_Q128_4 * ((baseprice128*0.95*0.75) - 0.027*128)) + (New_Q64_4 * ((baseprice64*1.05*0.75) - 0.027*64))
 ```
 
 : Table of quantities sold and profits when Tide changes the price of Tide 64 and 128. Price changes are shown in percentages
@@ -565,19 +469,27 @@ q_64 = c(basevolume64, New_Q64_1, New_Q64_2, New_Q64_3, New_Q64_4)
 #TotalProfitsW = c(TotalProfit1, TotalProfit2, TotalProfit3, TotalProfit4)
 TotalProfitsR = c(BaseTotalProfit, Profit1, Profit2, Profit3, Profit4)
 ChangeInPrice = c("Base Price", "Both +", "Both-", "T128 + T64 -", "T128 - T64 +")
-<<<<<<< HEAD
-<<<<<<< HEAD
-Color = c(1, 1, 2, 2,2)
-=======
-=======
->>>>>>> parent of 204c9c2... Changed x axis title for final graph
 Color = c(1, 1, 2, 2,1)
->>>>>>> parent of 204c9c2... Changed x axis title for final graph
 Price_Change<- as.factor(paste('128',del_price_128,'64',del_price_64, sep = "|"))
-
 NewTable <- data.frame(del_price_128, del_price_64, q_128, q_64,Price_Change, TotalProfitsR, ChangeInPrice, Color)
-
 NewTable
+```
+
+Final Table:
++---------------+---------------+-------------+--------------+---------------+
+| del_price_128 | del_price_64  | q_128       | q_64         | Total profits |          
++===============+===============+=============+==============+===============+
+| 0.05          | 0.05          | 222204      |  275007      |  1192575      |
++---------------+---------------+-------------+--------------+---------------+
+| -0.05         | -0.05         | 276212      |  291557      |  1123340      |
++---------------+---------------+-------------+--------------+---------------+
+| 0.05          | -0.05         | 217590      | 319127       |  1149044      |
++---------------+---------------+-------------+--------------+---------------+
+| -0.05         | 0.05          | 282070      | 251248       |  1164671      |
++---------------+---------------+-------------+--------------+---------------+
+
+Data Visualization of New Profits verses Old
+```{r}
 # ggplot(data = NewTable, aes(ChangeInPrice,TotalProfitsR, color = ChangeInPrice)) + 
 #    geom_point(size=10,show.legend = NA) + 
 #    theme_classic() +
@@ -589,7 +501,6 @@ NewTable
 #     label.padding = unit(0.55, "lines"), # Rectangle size around label
 #     label.size = 0.35,
 #     color = "black")
-
 plot2 <- 
    ggplot(data = NewTable, aes(reorder(ChangeInPrice,TotalProfitsR), TotalProfitsR, fill = Color)) + 
    geom_col() + 
@@ -598,7 +509,6 @@ plot2 <-
    xlab("Change in Price") +
    ylab("Total Profit $") +
    ggtitle("Which One is Higher Than the Base Profit?")
-
 plot2
 ```
 
@@ -623,44 +533,7 @@ c. How do you evaluate the current pricing tactics? Do you recommend changes?
 
 Base Profit: 1161182
 
-It seems that increasing both prices by 5% genereates the highest profit of 1,205,947, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
-
-
-Double Checking changing only one Tide product price doesn't have a better profit:
-
-```{r}
-New_Q128_5 <- demand_change(0.05, 0, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_5 <- demand_change(0.05, 0 ,1.16,-1.585 , -0.2809, basevolume64)
-
-New_Q128_6 <- demand_change(0, 0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_6 <- demand_change(0, 0.05 ,1.16,-1.585 , -0.2809, basevolume64)
-
-New_Q128_7 <- demand_change(-0.05, 0, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_7 <- demand_change(-0.05, 0 ,1.16,-1.585 , -0.2809, basevolume64)
-
-New_Q128_8 <- demand_change(0, -0.05, -2.11, 0.211, 1.1648, basevolume128)
-New_Q64_8 <- demand_change(0, -0.05 ,1.16,-1.585 , -0.2809, basevolume64)
-
-#Increase price 128 by 5% but keep 64 the same
-Profit5 = (New_Q128_5 * ((baseprice128*1.05*0.75) - 0.027*128)) + (New_Q64_5 * ((baseprice64*1.0*0.75) - 0.027*64))
-
-#Keep price 128 the same but increase price 64 by 5%
-Profit6 = (New_Q128_6 * ((baseprice128*1.0*0.75) - 0.027*128)) + (New_Q64_6 * ((baseprice64*1.05*0.75) - 0.027*64))
-
-#Decrease price 128 by 5% but keep 64 the same
-Profit7 = (New_Q128_7 * ((baseprice128*.95*0.75) - 0.027*128)) + (New_Q64_7 * ((baseprice64*1.0*0.75) - 0.027*64))
-
-#Keep price 128 the same but decrease price 64 by 5%
-Profit8 = (New_Q128_8 * ((baseprice128*1.0*0.75) - 0.027*128)) + (New_Q64_8 * ((baseprice64*0.95*0.75) - 0.027*64))
-
-NewProfits <- c(Profit5, Profit6, Profit7, Profit8)
-
-NewTable2 <- data.frame(TotalProfitsR, NewProfits)
-
-NewTable2
-```
-
- 
+It seems that increasing both prices by 5% genereates the highest profit of 1,192,575, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
 
 
 
