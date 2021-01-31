@@ -361,8 +361,16 @@ They are surprisingly identical, using unit sales instead of velocity did not ha
 r = 25%
 C = 0.027 / oz
 
+**Equations with the values that are not significant, we are choosing not to use these to describe unit sales**
 Q128 = A128 * P128^(-2.3836) * P64^(0.2097) * PW64^(1.1648)
 Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
+
+**Equations with the values that are significant, omitted the coefficient for Tide 64 since its p.value was .1117 for the Tide 128 unit sales.**
+Q128 = A128 * P128^(-2.3836) * PW64^(1.1648)
+**Omitted the Wisk 64 coefficient, since its p.value was .1052 for the tide 64 unit sales**
+Q64 = A64 * P128^(0.9028) * P64^(-1.4867)
+
+
 
 # A
 
@@ -410,19 +418,53 @@ Scenario4: 5% decrease in price 128 and 5% increase in 64
 r = 25%
 C = 0.027 / oz
 
+**origional equations**
 Q128 = A128 * P128^(-2.3836) * P64^(0.2097) * PW64^(1.1648)
 Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
 
+**removed those with coefficients that are not significant**
+Q128 = A128 * P128^(-2.3836) * PW64^(1.1648)
+Q64 = A64 * P128^(0.9028) * P64^(-1.4867)
 
+
+####################Saved all this in case we need it
+```{r}
+#pricechange = 0.05
+# Specify the function
+#demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, price_elasticity3, basequantity) {
+   
+   # New demand from method 1 
+#   quantity_change_1 = ((1 + price_change1)^price_elasticity1) * ((1 + price_change2)^price_elasticity2) *
+#      ((1)^price_elasticity3)
+    
+   #Get new quantity from ratio of new / old 
+   
+#   NewQuantity = quantity_change_1 * basequantity
+   
+   # Return results as a list
+#   return(NewQuantity)
+#}
+```
+
+Running the Function with all values
+```{r}
+#New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 0.2097,1.1648, basevolume128)
+#New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
+#New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
+#New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.9028, -0.2809, basevolume64)
+#New_Q128_3 <- demand_change(0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
+#New_Q64_3 <- demand_change(-0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
+#New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 0.2097,1.1648, basevolume128)
+#New_Q64_4 <- demand_change(0.05,-0.05,-1.4867, 0.9028, -0.2809, basevolume64)
+```
+#######################Saved all this in case we need it
 ```{r}
 pricechange = 0.05
 # Specify the function
-demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, price_elasticity3, basequantity) {
+demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, basequantity) {#Removed one price elasticity since we only have two
    
    # New demand from method 1 
-   quantity_change_1 = ((1 + price_change1)^price_elasticity1) * ((1 + price_change2)^price_elasticity2) *
-      ((1)^price_elasticity3)
-    
+   quantity_change_1 = ((1 + price_change1)^price_elasticity1) * ((1 + price_change2)^price_elasticity2)
    #Get new quantity from ratio of new / old 
    
    NewQuantity = quantity_change_1 * basequantity
@@ -432,17 +474,19 @@ demand_change <- function(price_change1, price_change2, price_elasticity1, price
 }
 ```
 
-Running the Function
+Running the Function with all values
 ```{r}
-New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
-New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.9028, -0.2809, basevolume64)
-New_Q128_3 <- demand_change(0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_3 <- demand_change(-0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
-New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 0.2097,1.1648, basevolume128)
-New_Q64_4 <- demand_change(0.05,-0.05,-1.4867, 0.9028, -0.2809, basevolume64)
+New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 1.1648, basevolume128)
+New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.9028, basevolume64)
+New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 1.1648, basevolume128)
+New_Q64_2 <- demand_change(-0.05,-0.05,-1.4867,0.9028, basevolume64)
+New_Q128_3 <- demand_change(0.05, -0.05, -2.3836, 1.1648, basevolume128)
+New_Q64_3 <- demand_change(-0.05,0.05,-1.4867,0.9028,  basevolume64)
+New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 1.1648, basevolume128)
+New_Q64_4 <- demand_change(0.05,-0.05,-1.4867, 0.9028,  basevolume64)
 ```
+
+
 
 # G
 Profit Equation:
@@ -506,10 +550,10 @@ plot2
 
 a. What is the extent of cannibalization within the Tide product line? 
 
-Q128 = A128 * P128^(-2.3836) * P64^(0.2097) * PW64^(1.1648)
-Q64 = A64 * P128^(0.9028) * P64^(-1.4867) * PW64^(-0.2809)
+Q128 = A128 * P128^(-2.3836) * PW64^(1.1648)
+Q64 = A64 * P128^(0.9028) * P64^(-1.4867)
 
-Cross PE of 128 is 0.9028 which is > Cross PE of 64 at 0.2097.
+Cross PE of 128 is 0.9028 which is > Cross PE of 64 which was not significant.
 
 This suggests that Tide 128 cannibalizes Tide 64.
 
