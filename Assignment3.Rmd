@@ -522,7 +522,7 @@ c. How do you evaluate the current pricing tactics? Do you recommend changes?
 
 Base Profit: 1161182
 
-It seems that increasing both prices by 5% genereates the highest profit of 1,192,575, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
+It seems that increasing both prices by 5% generates the highest profit of 1,192,575, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
 
 
 
