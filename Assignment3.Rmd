@@ -427,8 +427,8 @@ Q128 = A128 * P128^(-2.3836) * PW64^(1.1648)
 Q64 = A64 * P128^(0.9028) * P64^(-1.4867)
 
 
+```{r include= FALSE}
 ####################Saved all this in case we need it
-```{r}
 #pricechange = 0.05
 # Specify the function
 #demand_change <- function(price_change1, price_change2, price_elasticity1, price_elasticity2, price_elasticity3, basequantity) {
@@ -446,8 +446,8 @@ Q64 = A64 * P128^(0.9028) * P64^(-1.4867)
 #}
 ```
 
-Running the Function with all values
-```{r}
+```{r include= FALSE}
+##Running the Function with all values
 #New_Q128_1 <- demand_change(0.05, 0.05, -2.3836, 0.2097,1.1648, basevolume128)
 #New_Q64_1 <- demand_change(0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
 #New_Q128_2 <- demand_change(-0.05, -0.05, -2.3836, 0.2097,1.1648, basevolume128)
@@ -456,8 +456,10 @@ Running the Function with all values
 #New_Q64_3 <- demand_change(-0.05,0.05,-1.4867,0.9028, -0.2809, basevolume64)
 #New_Q128_4 <- demand_change(-0.05, 0.05,-2.3836, 0.2097,1.1648, basevolume128)
 #New_Q64_4 <- demand_change(0.05,-0.05,-1.4867, 0.9028, -0.2809, basevolume64)
-```
 #######################Saved all this in case we need it
+
+```
+
 ```{r}
 pricechange = 0.05
 # Specify the function
@@ -523,13 +525,13 @@ Final Table:
 +---------------+---------------+-------------+--------------+---------------+
 | del_price_128 | del_price_64  | q_128       | q_64         | Total profits |          
 +===============+===============+=============+==============+===============+
-| 0.05          | 0.05          | 222204      |  275007      |  1192575      |
+| 0.05          | 0.05          | 232804.3    | 282954.3     |  1226683      |
 +---------------+---------------+-------------+--------------+---------------+
-| -0.05         | -0.05         | 276212      |  291557      |  1123340      |
+| -0.05         | -0.05         | 263006.8    | 291557.0     |  1089241      |
 +---------------+---------------+-------------+--------------+---------------+
-| 0.05          | -0.05         | 217590      | 319127       |  1149044      |
+| 0.05          | -0.05         | 207186.8    | 319127.5     |  1115569      |
 +---------------+---------------+-------------+--------------+---------------+
-| -0.05         | 0.05          | 282070      | 251248       |  1164671      |
+| -0.05         | 0.05          | 295526.0    | 251248.2     |  1199416      |
 +---------------+---------------+-------------+--------------+---------------+
 
 Data Visualization of New Profits verses Old
@@ -553,20 +555,20 @@ a. What is the extent of cannibalization within the Tide product line?
 Q128 = A128 * P128^(-2.3836) * PW64^(1.1648)
 Q64 = A64 * P128^(0.9028) * P64^(-1.4867)
 
-Cross PE of 128 is 0.9028 which is > Cross PE of 64 which was not significant.
+Cross PE of 128 is 0.9028 which is > Cross PE of 64 which was not significant. Tide 128 price has a significant effect on Tide 64's demand, and Wisk 64's price does not have a significant effect on Tide 64's demand, which means there is cannibalization within Tide's product line. If there is an increase in Tide 128's price, there is an increase in demand for Tide 64.
 
 This suggests that Tide 128 cannibalizes Tide 64.
 
 b. Does Tide face a competitive threat from Wisk?
 
-A little bit. If Tide 128 price goes up and its demand decreases, price for Tide 64 goes up slightly but price for Wisk goes up more. However, if Tide 64 price increases and its demand decreases, Tide 128 goes up while Wisk price decreases but only slightly. There is competition for Tide 128, but not Tide 64. 
+Yes. If Tide 128 price goes up the price for Wisk 64 goes up. It is able to "follow" Tide 128's price and steal revenue. A decrease in price of Wisk 64 creates a decrease in demand for Tide 128.
 
 
 c. How do you evaluate the current pricing tactics? Do you recommend changes? 
 
-Base Profit: 1161182
+Base Profit: \$1,161,182
 
-It seems that increasing both prices by 5% generates the highest profit of 1,192,575, which is > than the base profit of 1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5%.
+It seems that increasing both prices by 5% generates the highest profit of \$1,226,683, which is > than the base profit of \$1,161,182. Therefore, we recommend increasing the prices of both Tide products by 5% in order to increase profit by \$65,501.
 
 
 
