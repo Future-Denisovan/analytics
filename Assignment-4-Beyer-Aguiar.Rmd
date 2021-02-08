@@ -11,13 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Part I: Promotional event planning
 
-## Is there evidence for strong seasonal demand for this product, based on the figures presented in the
-“Event” sheet? (0.5 points) hint: The timing of events in the “Event” sheet are reported the “Promotion
-calendar” sheet.
+## 1) Is there evidence for strong seasonal demand for this product, based on the figures presented in the “Event” sheet? (0.5 points) hint: The timing of events in the “Event” sheet are reported the “Promotion calendar” sheet.
 
 For Event 2, which occurs in December, the base cases is 1360, and for Event 1 which occurs in November, the base cases is 728. This is far larger than the base cases for other events during other times of the year.
 
-## Expressed as a percentage of base sales, does event 1 or event 2 produce a greater incremental sales response? (0.5 points)
+## 2) Expressed as a percentage of base sales, does event 1 or event 2 produce a greater incremental sales response? (0.5 points)
 
 ```{r}
 Event_1_Percent<-paste(round((1129-728)/(1129), digits = 2), '%')
@@ -29,3 +27,67 @@ Promo_Table<-data.frame(Event_1_Percent,Event_2_Percent)
 Promo_Table
 ```
 
+## 3) Discuss the profitability results for these five events. Which events are most profitable and why? What can you learn from this analysis about what sorts of promotional events are most profitable? (0.5 points)
+
+
+The most profitable events are Event 2 with an ROI of 44% and Event 5 with an ROI of 53%. 
+
+
+## 4) Recalculate the profitability for event 1 and 2 assuming that retailers will engage in 4 weeks rather
+than 2 weeks of forward buying. (0.5 points)
+
+Specify functions
+
+```{r}
+#Incremental Contribution = Incremental Consumed Cases × VCM
+Incremental_Contribution <- function(Incremental_Consumed_Cases, VCM) {
+     
+  Inc_Con <- Incremental_Consumed_Cases*VCM
+
+   return(Inc_Con)
+}
+
+Variable_Cost <- function(Total_Consumed_Cases, Off_Invoice){
+  Var_Cost<-Total_Consumed_Cases*Off_Invoice
+  return(Var_Cost)
+}
+
+Forward_Buy_Cost<-function(Forward_Buy_Cases, Off_Invoice){
+  For_Buy_Cst<-Forward_Buy_Cases*Off_Invoice
+  return(For_Buy_Cst)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+Do calculations for Event 1 and Event 2
+
+```{r}
+
+
+
+
+```
+
+
+
+
+## 5) Compare the approach to calculating the ROI that we took in class with the Booz Allen Hamilton
+approach taken here (the difference was explained above). Is one of the approaches better than the
+other, and why? (0.5 points) hint: consider a scenario where the margin is 50 cents and we are able to
+sell 10 units, if we cut the price by 25 cents and the new margin is 25 cents, we are able to sell 20 units.
+What is the “cost” of this promotion? Is it 10 (baseline units) times 25 cents (reduced margin) or is it
+20 (baseline + incremental units) times 25 cents?
+
+
+ROI = Change in Profit/Investment = ((P-C)*Change in Quantity - Investment)/Investment
