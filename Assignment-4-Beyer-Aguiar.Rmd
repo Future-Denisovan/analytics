@@ -63,6 +63,7 @@ ROI_fun<-function(Event_Gross_Contribution,Event_Cost){
 }
 
 
+
 ```
 
 Do calculations for Event 1 and Event 2
