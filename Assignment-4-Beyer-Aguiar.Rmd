@@ -9,22 +9,23 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Part I: Promotional event planning
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Is there evidence for strong seasonal demand for this product, based on the figures presented in the
+“Event” sheet? (0.5 points) hint: The timing of events in the “Event” sheet are reported the “Promotion
+calendar” sheet.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+For Event 2, which occurs in December, the base cases is 1360, and for Event 1 which occurs in November, the base cases is 728. This is far larger than the base cases for other events during other times of the year.
 
-```{r cars}
-summary(cars)
+## Expressed as a percentage of base sales, does event 1 or event 2 produce a greater incremental sales response? (0.5 points)
+
+```{r}
+Event_1_Percent<-paste(round((1129-728)/(1129), digits = 2), '%')
+
+Event_2_Percent<-paste(round((2303-1360)/(2303), digits = 2), '%')
+
+Promo_Table<-data.frame(Event_1_Percent,Event_2_Percent)
+
+Promo_Table
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
