@@ -57,15 +57,10 @@ Forward_Buy_Cost<-function(Forward_Buy_Cases, Off_Invoice){
   return(For_Buy_Cst)
 }
 
-
-
-
-
-
-
-
-
-
+ROI_fun<-function(Event_Gross_Contribution,Event_Cost){
+  ROI<-paste(round((100*(Event_Gross_Contribution/Event_Cost)),digits=1),"%")
+  return(ROI)
+}
 
 
 ```
@@ -75,6 +70,27 @@ Do calculations for Event 1 and Event 2
 ```{r}
 
 
+
+Event_1_Inc_Con<-Incremental_Contribution(401,20)#I got VCM from Figure 1: Brand Summary 
+Event_2_Inc_Con<-Incremental_Contribution(944,20)
+
+
+Event_1_Var_Cost<-Variable_Cost(1129,4.2)
+Event_2_Var_Cost<-Variable_Cost(2303,4.2)
+
+wks_4_For<-458#Number purchased for four weeks of foward buying, (229/2)*4
+Event_1_For_Buy_Cst<-Forward_Buy_Cost(wks_4_For,4.2)
+Event_2_For_Buy_Cst<-Forward_Buy_Cost(wks_4_For,4.2)
+
+Fixed_Payment_Cost<-2500#(MDF)
+
+Event_1_Total_Cost<-Event_1_Inc_Con+Event_1_Var_Cost+Event_1_For_Buy_Cst+Fixed_Payment_Cost
+Event_2_Total_Cost<-Event_2_Inc_Con+Event_2_Var_Cost+Event_2_For_Buy_Cst+Fixed_Payment_Cost
+
+
+#Find out how many cases we have
+ROI_Event_1<-ROI_fun(8019,Event_1_Total_Cost)
+ROI_Event_2<-ROI_fun(18874,Event_2_Total_Cost)
 
 
 ```
@@ -90,4 +106,15 @@ What is the “cost” of this promotion? Is it 10 (baseline units) times 25 cen
 20 (baseline + incremental units) times 25 cents?
 
 
+
+
 ROI = Change in Profit/Investment = ((P-C)*Change in Quantity - Investment)/Investment
+
+
+```{r}
+#Events 3-5 in case I need them.
+Event_3_Inc_Con<-Incremental_Contribution(278,20)
+Event_4_Inc_Con<-Incremental_Contribution(63,20)
+Event_5_Inc_Con<-Incremental_Contribution(602,20)
+```
+
