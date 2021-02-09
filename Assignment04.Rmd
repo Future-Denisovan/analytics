@@ -1,0 +1,247 @@
+---
+title: "Assignment04"
+author: "Annie Beyer & Caleb Aguiar"
+date: "2/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## PART I
+
+#Question 1
+
+Event 1:
+-ROI: -2%
+-Incremental Cases: 401
+-Season: November
+
+Event 2:
+-ROI: 44%
+-Incremental Cases: 944
+-Season: December
+
+Event 3:
+-ROI: -22%
+-Incremental Cases: 278
+-Season: April
+
+Event 4:
+-ROI: -79%
+-Incremental Cases: 63
+-Season: June / July
+
+Event 5:
+-ROI: 53%
+-Incremental Cases: 602
+-Season: July / Aug
+
+There is evicence of seasonality (December and late july early august show the largest increases in incremental cases and ROI. Since they're selling baked goods it makes sense why December's sales go up due to holiday seasons)
+
+#Question 2
+
+```{r}
+# Event 1:
+BaseSales1 = 2.31 * 728
+IncrementalSales1 = 1.99 * 401
+
+IS1 = IncrementalSales1/BaseSales1
+
+# Event 2:
+BaseSales2 = 2.31 * 1360
+IncrementalSales2 = 2.19 * 944
+
+IS2 = IncrementalSales2/BaseSales2
+
+ISboth = c(IS1,IS2)
+ISboth
+```
+
+Answer: Event 2 has a greater incremental sales response. 
+
+
+#Question 3
+
+
+```{r}
+Event5Cost = 7871
+Event5ROI = 0.53
+Event_deltaProfit5 = Event5ROI*Event5Cost
+
+Event2Cost = 13137
+Event2ROI = 0.44
+Event_deltaProfit2 = Event2ROI*Event2Cost
+
+ProfitComparison = data.frame(Event = c(2,5),
+                              ChangeProfit = c(Event_deltaProfit2, Event_deltaProfit5))
+
+ProfitComparison
+```
+Event 5 has the greatest return on investment. This means that the change in profit / the investment made for the promotional campaign had the highest outcome (53%). This event however, had the third lowest event cost, meaning its investment was relatively low. 
+
+The other event that had the highest ROI was Event 2 (44%). In addition, this event had the highest event cost, almost double that of event 5. For this reason, events 2 change in profit is higher than that of event 5's.  
+
+#Question 4
+
+Assumption: Doubling the weeks of forward buy double the number of forward buy cases
+
+```{r}
+ForwardBuyCases = 229*2
+
+#Event 1 new profit calculation
+ForwardBuyCost = 4.20 * ForwardBuyCases
+
+EventCost1 = 8202-962+ForwardBuyCost
+EventGC1 = 8019-EventCost1
+ROI_1 = EventCost1/EventGC1
+DeltaProfit1 = ROI_1*EventCost1
+
+#Event 2 new profit calculations
+EventCost2 = 13137-962+ForwardBuyCost
+EventGC2 = 18874-EventCost2
+ROI_2 = EventCost2/EventGC2
+DeltaProfit2 = ROI_2*EventCost2
+
+NewProfits12 = data.frame(EventNumber = c(1,2),
+                          DeltaProfit = c(DeltaProfit1, DeltaProfit2))
+
+NewProfits12
+
+```
+
+
+#Question 5
+Which approach to calculating ROI is better and why?
+
+
+
+##PART II
+
+```{r}
+load("Hellmans.RData")
+library(skimr)
+
+skim(hellmans_DF)
+View(hellmans_DF)
+```
+
+#Question 1
+
+```{r}
+#Create Price Variable and divide display and feature / 100
+
+hellmans_DF$Price = hellmans_DF$sales_dollars/hellmans_DF$sales_units
+hellmans_DF$feature_pctacv = hellmans_DF$feature_pctacv/100
+hellmans_DF$display_pctacv = hellmans_DF$display_pctacv/100
+
+
+```
+
+Exploration of Dom vs Jewel
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+JW = subset(hellmans_DF, account == "Jewel")
+DM = subset(hellmans_DF, account == "Dominicks")
+summary(JW)
+summary(DM)
+
+JWPrice = mean(JW$Price)
+JWFeat = mean(JW$feature_pctacv)
+JWDisp = mean(JW$display_pctacv)
+JWUnits = mean(JW$sales_units)
+
+DMPrice = mean(DM$Price)
+DMFeat = mean(DM$feature_pctacv)
+DMDisp = mean(DM$display_pctacv)
+DMUnits = mean(DM$sales_units)
+
+SummaryTable = data.frame(Account = c("Jewel", "Dominick"),
+                          Price = c(JWPrice, DMPrice),
+                          Feature = c(JWFeat, DMFeat),
+                          Display = c(JWDisp, DMDisp),
+                          Units = c(JWUnits, DMUnits))
+SummaryTable
+```
+
+Graph
+```{r}
+library(gridExtra)
+hist1 <- ggplot(data = SummaryTable, mapping = aes(x = Account, y = Price, fill = Account)) + geom_col() + theme(legend.position = "none", 
+                                                                                                                 panel.background = element_blank())
+hist2 <- ggplot(data = SummaryTable, mapping = aes(x = Account, y = Feature, fill = Account)) + geom_col()+ theme(legend.position = 'none', 
+                                                                                                                 panel.background = element_blank()) 
+hist3 <- ggplot(data = SummaryTable, mapping = aes(x = Account, y = Display, fill = Account)) + geom_col()+ theme(legend.position = 'none', 
+                                                                                                                 panel.background = element_blank()) 
+hist4 <- ggplot(data = SummaryTable, mapping = aes(x = Account, y = Units, fill = Account)) + geom_col()+ theme(legend.position = 'none', 
+                                                                                                                 panel.background = element_blank()) 
+
+hist = list(hist1, hist2, hist3, hist4)
+histg = grid.arrange(grobs = hist, ncol = 2)
+
+```
+
+Discussion
+Dominick's Display feature mean is nearly half that of Jewel's, (0.12 vs 0.22) and also they are less than Jewel's in terms of average feature (0.13 vs 0.17). 
+
+
+Correlation
+```{r}
+cor(hellmans_DF[4:8])
+```
+
+Discussion
+Sales units and dollars are highly correlated (which makes sense)
+Price is highly correlated with sales units and sales dollares (which again makes sense). It is also very correlated with display, which could be an issue
+Display and Feature are also highly correlated. This could be problematic for sure.
+
+##Question 2
+
+```{r}
+#Just Quant and Price
+JW_lm1 = lm(log(sales_units) ~ log(Price), data = JW)
+DM_lm1 = lm(log(sales_units) ~ log(Price), data = DM)
+
+#Adding Feature and Display
+JW_lm2 = lm(log(sales_units) ~ log(Price) + feature_pctacv + display_pctacv, data = JW)
+DM_lm2 = lm(log(sales_units) ~ log(Price) + feature_pctacv + display_pctacv, data = DM)
+
+#Adding Week
+JW_lm3 = lm(log(sales_units) ~ log(Price) + feature_pctacv + display_pctacv + week, data = JW)
+DM_lm3 = lm(log(sales_units) ~ log(Price) + feature_pctacv + display_pctacv + week, data = DM)
+
+summary(JW_lm1)
+summary(JW_lm2)
+summary(JW_lm3)
+
+summary(DM_lm1)
+summary(DM_lm2)
+summary(DM_lm3)
+
+```
+
+
+DISCUSSION:
+For Dominicks, the model improves from around 0.50 ADJ R2 to 0.71 ADJ R2 when adding in the display and feature. Additionally, all values in the model are significant.
+
+For Jewel, the original model is also around 0.50 ADJ R2 and increases to 0.79 ADJ R2, however, feature is not significant. Therefore, it should remain as a 0 in the model. 
+
+Also, the price coefficient for both accounts decreases significantly from around -4 to around -1, which makes more sense (-4 is highly elastic).
+
+
+##Question 3
+
+SEE EXCEL FILE
+
+
+
+
+
+
+
+
+
