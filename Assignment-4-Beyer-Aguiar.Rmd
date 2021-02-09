@@ -90,8 +90,14 @@ Event_2_Total_Cost<-Event_2_Inc_Con+Event_2_Var_Cost+Event_2_For_Buy_Cst+Fixed_P
 
 
 #Find out how many cases we have
-ROI_Event_1<-ROI_fun(8019,Event_1_Total_Cost)
-ROI_Event_2<-ROI_fun(18874,Event_2_Total_Cost)
+ROI_Event_1<-ROI_fun(Event_1_Inc_Con,Event_1_Total_Cost)
+ROI_Event_2<-ROI_fun(Event_2_Inc_Con,Event_2_Total_Cost)
+
+ROI_table<-data.frame(ROI_Event_1,ROI_Event_2)
+
+ROI_table
+
+hellmans_DF$feature_pctacv = hellmans_DF$feature_pctacv/100
 
 
 ```
@@ -99,23 +105,46 @@ ROI_Event_2<-ROI_fun(18874,Event_2_Total_Cost)
 
 
 
-## 5) Compare the approach to calculating the ROI that we took in class with the Booz Allen Hamilton
-approach taken here (the difference was explained above). Is one of the approaches better than the
-other, and why? (0.5 points) hint: consider a scenario where the margin is 50 cents and we are able to
-sell 10 units, if we cut the price by 25 cents and the new margin is 25 cents, we are able to sell 20 units.
-What is the “cost” of this promotion? Is it 10 (baseline units) times 25 cents (reduced margin) or is it
-20 (baseline + incremental units) times 25 cents?
+## 5) Compare the approach to calculating the ROI that we took in class with the Booz Allen Hamilton approach taken here (the difference was explained above). Is one of the approaches better than the other, and why? (0.5 points) hint: consider a scenario where the margin is 50 cents and we are able to sell 10 units, if we cut the price by 25 cents and the new margin is 25 cents, we are able to sell 20 units. What is the “cost” of this promotion? Is it 10 (baseline units) times 25 cents (reduced margin) or is it 20 (baseline + incremental units) times 25 cents?
+
+
+The ROI calculation in class is more accurate than the Booz Allen Hamilton approach, because the Booz Allen Hamilton approach isn't using the non-promoted VCM, so when we calculate the incremental contribution, we have an event gross contribution that is less than it should be. In the hint, if the margin is 50 dollars and we sell 10 units, we make 500 dollars, if we cut the price by 25 dollars and we sell 20 units,  we make 500 dollars again, and the overall cost technically $500, but the net outcome is same amount of profit. 
 
 
 
+# Part II: Estimating lift factors and promotion ROI analysis
 
-ROI = Change in Profit/Investment = ((P-C)*Change in Quantity - Investment)/Investment
+## 1)
+```{r}
+library(ggplot2)
+library(tidyverse)
+Dominik_Feature<-(summary(hellmans_DF[1:88,6]))
+Dominik_Display<-(summary(hellmans_DF[1:88,7]))
 
+Jewel_Feature<-(summary(hellmans_DF[89:176,6]))
+Jewel_Display<-(summary(hellmans_DF[89:176,7]))
+
+par(mfrow=c(1,4))#Set the plotting area into a 1*2 array
+
+#Set axis to the same for better comparison
+hist(hellmans_DF$display_pctacv[1:88], freq = F, col = "steelblue", xlab = "Percentage", main = "Dominicks Display")
+hist(hellmans_DF$feature_pctacv[1:88], freq = F, col = "aquamarine", xlab = "Percentage", main = "Dominicks Feature")
+hist(hellmans_DF$display_pctacv[89:176], freq = F, col = "firebrick", xlab = "Percentage", main = "Jewel Display")
+hist(hellmans_DF$feature_pctacv[89:176], freq = F, col = "mediumpurple1", xlab = "Percentage", main = "Jewel Feature")
+
+par(mfrow=c(1,1))
+
+
+```
 
 ```{r}
-#Events 3-5 in case I need them.
-Event_3_Inc_Con<-Incremental_Contribution(278,20)
-Event_4_Inc_Con<-Incremental_Contribution(63,20)
-Event_5_Inc_Con<-Incremental_Contribution(602,20)
+cor(hellmans_DF$display_pctacv[1:88],hellmans_DF$feature_pctacv[1:88])
+cor(hellmans_DF$display_pctacv[1:88],hellmans_DF$sales_dollars[1:88])
+cor(hellmans_DF$display_pctacv[89:176],hellmans_DF$feature_pctacv[89:176])
+cor(hellmans_DF$display_pctacv[89:176],hellmans_DF$sales_dollars[89:176])
+
 ```
+There could be some multicolliniarity issues since these variables correlate with each other.
+
+## 2) Estimate the log-linear demand model separately for each account, using price as the only explanatory variable.
 
