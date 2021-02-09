@@ -98,6 +98,8 @@ ROI_table<-data.frame(ROI_Event_1,ROI_Event_2)
 ROI_table
 
 hellmans_DF$feature_pctacv = hellmans_DF$feature_pctacv/100
+hellmans_DF$display_pctacv = hellmans_DF$display_pctacv/100
+
 
 
 ```
@@ -114,10 +116,20 @@ The ROI calculation in class is more accurate than the Booz Allen Hamilton appro
 
 # Part II: Estimating lift factors and promotion ROI analysis
 
-## 1)
+## 1) 
+
+Price is the current base(non-promoted price)
 ```{r}
 library(ggplot2)
 library(tidyverse)
+
+#price<-rep(c(2.31),each=176)
+
+#hellmans_DF<-cbind(hellmans_DF, price)
+
+
+hellmans_DF$price<-hellmans_DF$sales_dollars/hellmans_DF$sales_units
+
 Dominik_Feature<-(summary(hellmans_DF[1:88,6]))
 Dominik_Display<-(summary(hellmans_DF[1:88,7]))
 
@@ -139,12 +151,26 @@ par(mfrow=c(1,1))
 
 ```{r}
 cor(hellmans_DF$display_pctacv[1:88],hellmans_DF$feature_pctacv[1:88])
-cor(hellmans_DF$display_pctacv[1:88],hellmans_DF$sales_dollars[1:88])
+cor(hellmans_DF$display_pctacv[1:88],hellmans_DF$price[1:88])
 cor(hellmans_DF$display_pctacv[89:176],hellmans_DF$feature_pctacv[89:176])
-cor(hellmans_DF$display_pctacv[89:176],hellmans_DF$sales_dollars[89:176])
+cor(hellmans_DF$display_pctacv[89:176],hellmans_DF$price[89:176])
 
 ```
 There could be some multicolliniarity issues since these variables correlate with each other.
 
 ## 2) Estimate the log-linear demand model separately for each account, using price as the only explanatory variable.
+
+
+$log(Q) =  a - nlog(P) + Beta_d * 0 + B_f *0$ From slide 33
+
+
+```{r}
+
+Dominik_df<-hellmans_DF[1:88,]
+
+log_lin_model_Dominick<- lm(log(sales_units)~log(price), data = Dominik_df)
+
+summary(log_lin_model_Dominick)
+
+```
 
