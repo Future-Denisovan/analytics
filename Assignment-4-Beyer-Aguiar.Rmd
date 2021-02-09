@@ -26,6 +26,8 @@ Promo_Table<-data.frame(Event_1_Percent,Event_2_Percent)
 
 Promo_Table
 ```
+Discussion: Event 2 does
+
 
 ## 3) Discuss the profitability results for these five events. Which events are most profitable and why? What can you learn from this analysis about what sorts of promotional events are most profitable? (0.5 points)
 
@@ -126,7 +128,7 @@ library(tidyverse)
 #price<-rep(c(2.31),each=176)
 
 #hellmans_DF<-cbind(hellmans_DF, price)
-
+load('Hellmans.Rdata')
 
 hellmans_DF$price<-hellmans_DF$sales_dollars/hellmans_DF$sales_units
 
@@ -171,6 +173,30 @@ Dominik_df<-hellmans_DF[1:88,]
 log_lin_model_Dominick<- lm(log(sales_units)~log(price), data = Dominik_df)
 
 summary(log_lin_model_Dominick)
+
+log_lin_model_Dominick_disfea<- lm(log(sales_units)~log(price)+display_pctacv+feature_pctacv, data = Dominik_df)
+
+summary(log_lin_model_Dominick)
+
+log_lin_model_Dominick_disfea_wk<- lm(log(sales_units)~log(price)+display_pctacv+feature_pctacv+week, data = Dominik_df)
+
+summary(log_lin_model_Dominick_disfea_wk)
+
+```
+```{r}
+Jewel_df<-hellmans_DF[89:176,]
+
+log_lin_model_Jewel<- lm(log(sales_units)~log(price), data = Jewel_df)
+
+summary(log_lin_model_Jewel)
+
+log_lin_model_Jewel_disfea<- lm(log(sales_units)~log(price)+display_pctacv+feature_pctacv, data = Jewel_df)
+
+summary(log_lin_model_Jewel_disfea)
+
+log_lin_model_Jewel_disfea_wk<- lm(log(sales_units)~log(price)+display_pctacv+feature_pctacv+week, data = Jewel_df)
+
+summary(log_lin_model_Jewel_disfea_wk)
 
 ```
 
